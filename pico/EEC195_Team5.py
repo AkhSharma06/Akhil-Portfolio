@@ -12,7 +12,7 @@
 """
 
 """ [Imports] """
-from machine import ACD, Pin, PWM
+from machine import ADC, Pin, PWM
 from time import sleep
 
 
@@ -36,8 +36,8 @@ Motor_CS = ADC(Pin(28))  # Optional Current Sensing Pin; Analog Read
 Servo_PWM = Pin(20, Pin.OUT)
 
 # Initialize Pins for PWM and Set Frequency
-Motor_PWM = PWM(Motor_PWM_PIN, freq = MOTOR_FREQ)
-Servo_PWM = PWM(Servo_PWM_PIN, freq = SERVO_FREQ)
+Motor_PWM = PWM(Motor_PWM, freq = MOTOR_FREQ)
+Servo_PWM = PWM(Servo_PWM, freq = SERVO_FREQ)
 
 # ========================================= #
 #         === [Local Functions] ===         #
@@ -83,7 +83,7 @@ def set_motor_dir(direction):
         motor_INB.value(0)
 
 
-def set_motor_spd(percent_spd)
+def set_motor_spd(percent_spd):
     """
     Sets motor to desired speed as a percent of the MAXIMUM speed.
     !! set_motor_dir SHOULD be called before this function !!
@@ -116,7 +116,7 @@ def set_servo(direction, percent_ang=0):
         # Range (1100000 -> 1500000)
         delta = 400000 * percent_ang
         Servo_PWM.duty_ns(1500000 - delta)
-    elif direction == 'L' or direction 'l':
+    elif direction == 'L' or direction == 'l':
         # Range (1500000 -> 1900000)
         delta = 400000 * percent_ang
         Servo_PWM.duty_ns(1500000 + delta)
@@ -132,6 +132,7 @@ def car_init():
     set_motor_spd(0)
     set_servo('N')
     sleep(0.2)
+
 
 def car_stop():
     car_init()
