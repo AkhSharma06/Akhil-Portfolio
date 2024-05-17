@@ -83,7 +83,7 @@ def set_motor_dir(direction):
         motor_INB.value(0)
 
 
-def set_motor_spd(percent_spd)
+def set_motor_spd(percent_spd):
     """
     Sets motor to desired speed as a percent of the MAXIMUM speed.
     !! set_motor_dir SHOULD be called before this function !!
