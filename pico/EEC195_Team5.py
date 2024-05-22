@@ -12,7 +12,8 @@
 """
 
 """ [Imports] """
-from machine import ADC, Pin, PWM
+from machine import ADC, Pin, PWM, Timer
+import sys
 from time import sleep
 
 
@@ -32,12 +33,16 @@ Motor_INA = Pin(14, Pin.OUT)
 Motor_INB = Pin(15, Pin.OUT)
 Motor_CS = ADC(Pin(28))  # Optional Current Sensing Pin; Analog Read
 
-# Servo Motor Pin Setup
-Servo_PWM = Pin(20, Pin.OUT)
+Servo_PWM = Pin(20, Pin.OUT)  # Servo Motor Pin Setup
+Motor_Spd = Pin(22, Pin.IN, Pin.PULL_DOWN)  # Color Sensor for Tracking Speed Pin Setup
 
 # Initialize Pins for PWM and Set Frequency
 Motor_PWM = PWM(Motor_PWM, freq = MOTOR_FREQ)
 Servo_PWM = PWM(Servo_PWM, freq = SERVO_FREQ)
+
+# Init Timer + Counter
+timer = Timer()
+counter = 0
 
 # ========================================= #
 #         === [Local Functions] ===         #
@@ -93,8 +98,8 @@ def set_motor_spd(percent_spd):
     """
     if percent_spd < 0 or percent_spd > 100:
         return
-    duty_cycle = MOTOR_SPD_MAX * percent_spd  # Convert Percent Speed to Duty Cycle in ns
-    Motor_PWM.duty_ns(duty_cycle)
+    duty_cycle = MOTOR_SPD_MAX * percent_spd / 100.0  # Convert Percent Speed to Duty Cycle in ns
+    Motor_PWM.duty_ns(int(duty_cycle))
 
 
 def set_servo(direction, percent_ang=0):
@@ -137,6 +142,26 @@ def car_init():
 def car_stop():
     car_init()
 
+def spd_irq_handler(edge_type):
+    """
+    Interrupt handler for speed sensor
+    
+    :param edge_type <Pin obj>: Falling or rising edge irq detection
+    :return: none
+    """
+    global counter
+    counter += 1
+
+def spd_counter(timer):
+    global counter
+    if counter != 0:
+        print(f"Speed: {counter}\n")
+    counter = 0
+
+# 4.1 inches (diameter of wheel)
+# Determine RPM
+# def get_distance():
+    # todo
 
 # ========================================= #
 #          === [Main Function] ===          #
@@ -145,34 +170,12 @@ if True:
     # Init
     program_header()
     car_init()
+    Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
+    timer.init(mode = Timer.PERIODIC, freq = 3, callback = spd_counter)
 
-    # Set Motor to Forward for 50%
+    # Set Motor to Forward for 30%
     set_motor_dir('F')
-    set_motor_spd(50)
+    set_motor_spd(30)
     sleep(2)
     
     car_stop()
-
-# # Steer right
-# Servo_PWM.duty_ns(1100000)
-# print("Current: ", CS.read_u16())
-# sleep(1)
-# 
-# # Steer left
-# Servo_PWM.duty_ns(1900000)
-# print("Current: ", CS.read_u16())
-# sleep(1)
-# 
-# # Backwards and neutral servo
-# Servo_PWM.duty_ns(1500000)
-# print("Current: ", CS.read_u16())
-# sleep(1)
-# # setMotorSpeed(-512)
-# # sleep(3)
-# # Stop
-# print("Current: ", CS.read_u16())
-# setMotorSpeed(0)
-# Servo_PWM.duty_ns(0)
-# Motor_PWM.duty_ns(0)
-# print("run complete")
-# sleep(2)
