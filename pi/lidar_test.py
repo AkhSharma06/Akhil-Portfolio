@@ -15,7 +15,8 @@ client_socket.bind(('localhost', 8069))
 
 def process_data(data):
     print(data)
-    client_socket.send(json.dumps(data))
+    data_str = json.dumps(data)
+    client_socket.send(data_str.encode())
 
 try:
     #print(lidar.info)
