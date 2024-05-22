@@ -1,17 +1,19 @@
 import os
 from math import cos, sin, pi, floor
 from adafruit_rplidar import RPLidar
+import requests
+import json
 
 LIDAR_PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, LIDAR_PORT_NAME, timeout = 3)
 
 max_distance = 0
-
 scan_data = [0]*360
 
 def process_data(data):
-    print(data)
-
+    data_str = json.dumps(data)
+    print(data_str)
+    requests.post('http://10.42.0.61:8069', data= data_str)
 
 try:
     #print(lidar.info)
