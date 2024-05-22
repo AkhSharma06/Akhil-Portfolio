@@ -13,7 +13,6 @@
 
 """ [Imports] """
 from machine import ADC, Pin, PWM, Timer
-import sys
 from time import sleep
 
 
@@ -85,7 +84,7 @@ def set_motor_dir(direction):
         Motor_INB.value(1)
     elif direction == 'B' or direction == 'b':
         Motor_INA.value(0)
-        motor_INB.value(0)
+        Motor_INB.value(0)
 
 
 def set_motor_spd(percent_spd):
