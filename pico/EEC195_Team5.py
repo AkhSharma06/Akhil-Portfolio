@@ -159,6 +159,20 @@ def spd_irq_handler(edge_type):
     global counter
     counter += 1
 
+def send_sensor_data(speed):
+    if uart.write(speed.encode('utf-8')) < 0:
+        print("Error sending UART message to pi")
+    uart.flush()
+
+
+def rx_irq_handler(edde_type):
+    b = uart.readline()
+    try:
+        msg = b.decode('utf-8')
+        print(msg)
+    except:
+        pass
+
 def spd_counter(timer):
     global counter
     global traveled_distance
@@ -189,21 +203,15 @@ if True:
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
     timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
+    uart.irq(UART.RX_any, handler=rx_irq_handler)
 
     # Set Motor to Forward for 30%
-    set_motor_dir('F')
-    set_motor_spd(30)
-    sleep(2)
+    #set_motor_dir('F')
+    #set_motor_spd(30)
+    #sleep(2)
     
     car_stop()
 
     while True:
-        print("wating on recieving messages")
-        if uart.any():
-            b = uart.readline()
-            try:
-                msg = b.decode('utf-8')
-                print(msg)
-            except:
-                pass
-        sleep(1)
+        send_sensor_data(65)
+        sleep(2)

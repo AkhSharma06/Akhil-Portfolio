@@ -34,7 +34,7 @@ class S(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)  # Gets the data itself
         logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                 str(self.path), str(self.headers), post_data.decode('utf-8'))
-        gen_file_out(post_data.decode('utf-8'))
+        gen_file_out(post_data.decode('utf-8'), 0)
         self._set_response()  # Send received response
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
@@ -71,7 +71,7 @@ def gen_file_out(data, car_distance):
         # Ensure the angle is in the range [0, 360)
         if angle_resultant_deg < 0:
             angle_resultant_deg += 360
-
+        print(f"Angle {angle_resultant_deg}")
         line = f"{{{angle_resultant_deg},{car_distance}}} {data}"
         fp.writelines(line)
 
