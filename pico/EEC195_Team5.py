@@ -14,6 +14,7 @@
 """ [Imports] """
 from machine import ADC, Pin, PWM, Timer, UART
 from time import sleep
+from math import pi
 
 
 # ========================================= #
@@ -24,6 +25,8 @@ from time import sleep
 MOTOR_FREQ = 5000  # 5kHz; optimal VNH freq
 SERVO_FREQ = 100
 MOTOR_SPD_MAX = 200000  # Based on MOTOR_FREQ ! Must Change if MOTOR_FREQ is modified
+TIMER_FREQ = 2  # Hz
+COUNTS_TO_ROTATION = 3  # Number of counters per wheel rotation (aka # of tape pieces)
 
 """ [Initialization] """
 # DC Motor Pin Setup
@@ -39,9 +42,11 @@ Motor_Spd = Pin(22, Pin.IN, Pin.PULL_DOWN)  # Color Sensor for Tracking Speed Pi
 Motor_PWM = PWM(Motor_PWM, freq = MOTOR_FREQ)
 Servo_PWM = PWM(Servo_PWM, freq = SERVO_FREQ)
 
-# Init Timer + Counter
+# Init Globals
 timer = Timer()
 counter = 0
+last_distance = 0
+traveled_distance = 0
 
 # Init UART Communication Lines
 uart = UART(0, 115200, tx=Pin(0), rx=Pin(1))
@@ -156,14 +161,24 @@ def spd_irq_handler(edge_type):
 
 def spd_counter(timer):
     global counter
+    global traveled_distance
     if counter != 0:
-        print(f"Speed: {counter}\n")
+        distance = (counter / COUNTS_TO_ROTATION) * 4.1 * pi  # Distance formula 'Rotations * Wheel Dia * Pi = Inches'
+        print(f'Traveled {distance} inches')
+        traveled_distance += distance
     counter = 0
+
 
 # 4.1 inches (diameter of wheel)
 # Determine RPM
-# def get_distance():
-    # todo
+# Equation: RPM * Wheel Diameter * Pi == Inches / Min
+def get_distance():
+    global last_distance
+    global traveled_distance
+    distance = traveled_distance - last_distance
+    last_distance = traveled_distance
+    print(f'Traveled {distance} inches since last func call')
+    return distance
 
 # ========================================= #
 #          === [Main Function] ===          #
@@ -173,7 +188,7 @@ if True:
     program_header()
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
-    timer.init(mode = Timer.PERIODIC, freq = 3, callback = spd_counter)
+    timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
 
     # Set Motor to Forward for 30%
     set_motor_dir('F')
