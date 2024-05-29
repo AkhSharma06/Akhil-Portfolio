@@ -17,7 +17,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
 from sys import argv
 import numpy as np
-from math import radians, cos, sin
+import math
 
 """
 Server Handling Class
@@ -34,7 +34,7 @@ class S(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)  # Gets the data itself
         logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                 str(self.path), str(self.headers), post_data.decode('utf-8'))
-
+        gen_file_out(post_data.decode('utf-8'))
         self._set_response()  # Send received response
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
@@ -51,26 +51,29 @@ def run(server_class=HTTPServer, handler_class=S, port=8069):
     httpd.server_close()
     logging.info('Stopping httpd...\n')
 
-# Experimental WIP #
-def polar_to_cartesian(distances):
-    points = []
-    for degree in range(360):
-        distance = distances[degree]
-        radians = radians(degree)
-        x = distance * cos(radians)
-        y = distance * sin(radians)
-        z = 0  # Assuming 2D LiDAR
-        points.append([x, y, z])
-    return np.array(points)
+def deg_to_rad(degrees):
+    return degrees * (math.pi / 180)
 
 # Experimental WIP #
-# Need to convert polar to cartesian first       #
-# Then generate an LAS file for each cloud-point #
-def gen_file_out(data):
-    with open('data.out', 'a') as fp:
-        for angle, distance in enumerate(data):
-            line = f"{angle}, {distance}"
-            fp.writelines(line)
+def gen_file_out(data, car_distance):
+    with open('lidar_scans.txt', 'a') as fp:
+        # Initialize x and y components
+        x_sum = 0
+        y_sum = 0
+        for angle, distance in data:
+            angle_rad = deg_to_rad(angle)
+            x_sum += distance * math.cos(angle_rad)
+            y_sum += distance * math.sin(angle_rad)
+        # Calculate Resulting Angle of Vectors
+        angle_resultant = math.atan2(y_sum, x_sum)
+        angle_resultant_deg = math.degrees(angle_resultant)
+
+        # Ensure the angle is in the range [0, 360)
+        if angle_resultant_deg < 0:
+            angle_resultant_deg += 360
+
+        line = f"{{{angle_resultant_deg},{car_distance}}} {data}"
+        fp.writelines(line)
 
 # ========================================= #
 #          === [Main Function] ===          #
