@@ -18,6 +18,7 @@ import logging
 from sys import argv
 import numpy as np
 import math
+import json
 
 """
 Server Handling Class
@@ -34,7 +35,8 @@ class S(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)  # Gets the data itself
         logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
                 str(self.path), str(self.headers), post_data.decode('utf-8'))
-        gen_file_out(post_data.decode('utf-8'))
+        data = json.loads(post_data)
+        gen_file_out(data["scan_data"], 0)
         self._set_response()  # Send received response
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
@@ -60,7 +62,7 @@ def gen_file_out(data, car_distance):
         # Initialize x and y components
         x_sum = 0
         y_sum = 0
-        for angle, distance in data:
+        for angle, distance in enumerate(data):
             angle_rad = deg_to_rad(angle)
             x_sum += distance * math.cos(angle_rad)
             y_sum += distance * math.sin(angle_rad)
@@ -72,14 +74,14 @@ def gen_file_out(data, car_distance):
         if angle_resultant_deg < 0:
             angle_resultant_deg += 360
 
-        line = f"{{{angle_resultant_deg},{car_distance}}} {data}"
+        line = f"{{{angle_resultant_deg},{car_distance}}} {data}\n"
         fp.writelines(line)
 
 # ========================================= #
 #          === [Main Function] ===          #
 # ========================================= #
 if __name__ == '__main__':
-    open('data.out', 'w').close()  # Clear data.out file
+    open('lidar_scans.txt', 'w').close()  # Clear data.out file
     if len(argv) == 2:
         run(port=int(argv[1]))
     else:
