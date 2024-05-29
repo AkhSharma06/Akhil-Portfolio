@@ -1,5 +1,8 @@
 import math
 import numpy as np
+
+import math
+import numpy as np
 import open3d as o3d
 import time
 
@@ -95,65 +98,52 @@ def process_and_display(filename):
     pcd = o3d.geometry.PointCloud()
     vis.add_geometry(pcd)
 
-    file_position = 0  # Keep track of the file pointer position
+    # Read and process each line in the file
+    with open(filename, 'r') as file:
+        lines = file.readlines()
 
-    # Loop to read data in chunks of three lines
-    while True:
-        lines = []
-        try:
-            with open(filename, 'r') as file:
-                file.seek(file_position)  # Move to the last read position
-                for _ in range(3):
-                    line = file.readline().strip()
-                    if line:
-                        lines.append(line)
-                    else:
-                        break
-                file_position = file.tell()  # Update the file position
+    try:
+        for i, line in enumerate(lines):
+            line = line.strip()
+            print(f"Processing line {i + 1}: {line}")
+            angle, distance_travelled, distances = parse_data(line)
 
-            if not lines:
-                print("No new data. Waiting for new data...")
+            if angle is not None and distance_travelled is not None and distances is not None:
+                print(f"Line {i + 1} Parsed Angle: {angle}")
+                print(f"Line {i + 1} Parsed Distance Travelled: {distance_travelled}")
+                print(f"Line {i + 1} Parsed Distances Array: {distances}")
+                print()
+
+                # Convert to Cartesian coordinates with current translation
+                new_points = polar_to_cartesian(distances, translation)
+
+                # Add new points to the accumulated points
+                all_points.extend(new_points)
+
+                # Create point cloud from all accumulated points
+                pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
+                pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
+
+                # Update the visualizer
+                vis.clear_geometries()
+                vis.add_geometry(pcd)
+
+                # Adjust view to fit all points
+                update_view(vis, pcd)
+
+                # Simulate movement by updating the translation
+                translation = update_translation(translation, distance_travelled, angle)
+
+                # Wait for 1 second before the next update
                 time.sleep(1)
-                continue
+            else:
+                print(f"Failed to parse data on line {i + 1}")
 
-            for i, line in enumerate(lines):
-                print(f"Processing line {i + 1}: {line}")
-                angle, distance_travelled, distances = parse_data(line)
-
-                if angle is not None and distance_travelled is not None and distances is not None:
-                    print(f"Line {i + 1} Parsed Angle: {angle}")
-                    print(f"Line {i + 1} Parsed Distance Travelled: {distance_travelled}")
-                    print(f"Line {i + 1} Parsed Distances Array: {distances}")
-                    print()
-
-                    # Convert to Cartesian coordinates with current translation
-                    new_points = polar_to_cartesian(distances, translation)
-
-                    # Add new points to the accumulated points
-                    all_points.extend(new_points)
-
-                    # Create point cloud from all accumulated points
-                    pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
-                    pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
-
-                    # Update the visualizer
-                    vis.clear_geometries()
-                    vis.add_geometry(pcd)
-
-                    # Adjust view to fit all points
-                    update_view(vis, pcd)
-
-                    # Simulate movement by updating the translation
-                    translation = update_translation(translation, distance_travelled, angle)
-                else:
-                    print(f"Failed to parse data on line {i + 1}")
-
-            # Close the file after processing three lines
-            print("Processed 3 lines, closing the file to allow new data...")
-
-        except Exception as e:
-            print(f"Error reading file: {e}")
+    except KeyboardInterrupt:
+        # Close the visualizer on interrupt
+        vis.destroy_window()
 
 # Example usage
 filename = 'data.txt'
 process_and_display(filename)
+
