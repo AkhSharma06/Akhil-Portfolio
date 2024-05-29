@@ -52,7 +52,6 @@ def spd_counter(timer):
 GPIO.setup(SPEED_SENSOR, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.add_event_detect(SPEED_SENSOR, callback=spd_irq_handler, bouncetime=50)
 
-
 try:
     #print(lidar.info)
     for scan in lidar.iter_scans():
