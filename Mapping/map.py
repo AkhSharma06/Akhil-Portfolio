@@ -42,8 +42,7 @@ def update_view(vis, pcd):
     # Adjust the zoom to fit the bounding box
     view_ctl.set_zoom(2.0 / max(extent))  # Adjust this factor as needed
 
-
-def calculate_trajectory(translation, distance_traveled, angle_degrees):
+def update_translation(translation, distance_traveled, angle_degrees):
     angle_radians = math.radians(angle_degrees)
     translation[0] += distance_traveled * math.cos(angle_radians)
     translation[1] += distance_traveled * math.sin(angle_radians)
@@ -60,6 +59,8 @@ distances = [10] * 360
 translation = [0, 0, 0]
 # Store all points
 all_points = []
+distance_traveled = 1
+angle_degrees = 0
 
 # Create an empty point cloud object for initial visualization
 pcd = o3d.geometry.PointCloud()
@@ -86,7 +87,10 @@ try:
         update_view(vis, pcd)
 
         # Simulate movement by updating the translation
-        translation[1] += 10  # Move 10 units along the x-axis each iteration
+        #translation[1] += 10  # Move 10 units along the x-axis each iteration
+        translation = update_translation(translation, distance_traveled, angle_degrees)
+        distance_traveled += 1
+        angle_degrees += 1
 
         # Increment distances for the next iteration
         distances = [d + 1 for d in distances]  # Increment each distance by 1 for demonstration
