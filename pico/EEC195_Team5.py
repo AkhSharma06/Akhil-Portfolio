@@ -12,7 +12,7 @@
 """
 
 """ [Imports] """
-from machine import ADC, Pin, PWM, Timer
+from machine import ADC, Pin, PWM, Timer, UART
 from time import sleep
 
 
@@ -42,6 +42,9 @@ Servo_PWM = PWM(Servo_PWM, freq = SERVO_FREQ)
 # Init Timer + Counter
 timer = Timer()
 counter = 0
+
+# Init UART Communication Lines
+uart = UART(0, 115200, tx=Pin(0), rx=Pin(1))
 
 # ========================================= #
 #         === [Local Functions] ===         #
@@ -178,3 +181,14 @@ if True:
     sleep(2)
     
     car_stop()
+
+    while True:
+        print("wating on recieving messages")
+        if uart.any():
+            b = uart.readline()
+            try:
+                msg = b.decode('utf-8')
+                print(msg)
+            except:
+                pass
+        sleep(1)
