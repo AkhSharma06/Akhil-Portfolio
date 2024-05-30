@@ -74,6 +74,7 @@ def pid_calculations():
     GPIO.output(UART_PI_2_PICO_PIN, False)
     ser.write("hello".encode())
     GPIO.output(UART_PI_2_PICO_PIN, True)
+
 def polar_to_cartesian(angle, distance):
     """Convert polar coordinates to Cartesian coordinates."""
     x = distance * np.cos(np.radians(angle))
