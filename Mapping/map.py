@@ -9,7 +9,8 @@ FILENAME = 'lidar_scans.json'
 
 def polar_to_cartesian(distances, translation):
     points = []
-    for degree in range(360):
+    # Count down from 359 to 0 to account for CW rotations versus polar coordinate CCW rotations
+    for degree in range(359, 0, -1):
         if degree < len(distances):
             distance = distances[degree]
             if distance == 0:
@@ -40,12 +41,10 @@ def update_view(vis, pcd):
 
     # Set the lookat point to the center of the bounding box
     view_ctl.set_lookat(center)
-    # Set the front to a reasonable direction
-    view_ctl.set_front([0.0, 0.0, -1.0])
-    # Set the up direction
-    view_ctl.set_up([0.0, 1.0, 0.0])
+    view_ctl.set_front([0.0, 1.0, 0.0])    # 0 -1 0
+    view_ctl.set_up([0.0, 0.0, 1.0])        # 0 0 1
     # Adjust the zoom to fit the bounding box
-    view_ctl.set_zoom(2.0 / max(extent))  # Adjust this factor as needed
+    view_ctl.set_zoom(2.0 / max(extent)) 
 
 def update_translation(translation, distance_traveled, angle_degrees):
     angle_radians = math.radians(angle_degrees)
@@ -77,14 +76,16 @@ if True:
     while True:
         if os.path.exists(FILENAME):
             data_wait = 0
-            with open(FILENAME, 'r') as fp:
-                data = json.load(fp)
-            # angle = data["angle"]
-            # distance_travelled = data["car_distance"]
+            try:
+                with open(FILENAME, 'r') as fp:
+                    data = json.load(fp)
+            except json.JSONDecodeError:
+                continue
+            angle = 90
+            distance_traveled = data["car_distance"]
             distances = data["scans"]
 
             # Convert to Cartesian coordinates with current translation
-            
             new_points = polar_to_cartesian(distances, translation)
 
             # Add new points to the accumulated points
@@ -102,7 +103,7 @@ if True:
             update_view(vis, pcd)
 
             # Simulate movement by updating the translation
-            # translation = update_translation(translation, 0, 0)
+            translation = update_translation(translation, distance_traveled, angle)
         else:
             if data_wait == 0:
                 print("Waiting for JSON file to populate...")
