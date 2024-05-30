@@ -3,6 +3,7 @@ import serial
 import time
 
 def flash_pico():
+    print("Starting pico flash...")
     os.system("ampy --port /dev/ttyACM0 put pico/EEC195_Team5.py")
     os.system("ampy --port /dev/ttyACM0 run pico/EEC195_Team5.py")
     print("Done flashing")
