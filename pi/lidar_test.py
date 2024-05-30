@@ -88,6 +88,7 @@ def PID_control(scan_data):
         lh_mag = np.linalg.norm(lh_sum)
         error = rh_mag - lh_mag
         deadband = 10
+        print(f"Error calculated: {error} | RH {rh_mag} - LH {lh_mag}")
         if error >= deadband:
             print(f"Closer to Right Wall Turn Left !%")
         elif error <= -deadband:
