@@ -105,31 +105,15 @@ def PID_control(scan_data):
             lh_vectors.append((angle, distance))
         else:
             pass  # for now
-        rh_sum = np.sum(rh_vectors)
-        lh_sum = np.sum(lh_vectors)
-        rh_mag = np.linalg.norm(rh_sum)
-        lh_mag = np.linalg.norm(lh_sum)
-
-    rh_vectors = []
-    lh_vectors = []
-    for angle, distance in enumerate(scan_data):
-        # Process Right Hand Vectors
-        if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
-            rh_vectors.append(angle, distance)
-        elif (angle >= 160 and angle <= 200):
-            lh_vectors.append(angle, distance)
-        else:
-            pass  # for now
     rh_mag = find_mag(rh_vectors)
     lh_mag = find_mag(lh_vectors)
-    error = rh_mag - lh_mag
-    deadband = 10
-    print(f"Error calculated: {error} | RH {rh_mag} - LH {lh_mag}")
+    error = rh_mag - ((rh_mag + lh_mag) / 2)
+    deadband = ((rh_mag + lh_mag) / 2) * 0.1
+    print(f"Error calculated: {error} | RH {rh_mag} LH {lh_mag}")  
     if error >= deadband:
         print(f"Closer to Right Wall Turn Left !%")
     elif error <= -deadband:
         print(f"Closer to Left Wall Turn Right !")
-
 
 
 def process_data(data):
@@ -147,9 +131,10 @@ def process_data(data):
     ## PID CALCULATIONS
     if tmp_cnt % 5 == 0:
         PID_control(data)
+        print(json.dumps(data_json))
     tmp_cnt += 1
-    print(json.dumps(data_json))
-    # requests.post('http://10.42.0.61:8069', json=data_json)
+    #print(json.dumps(data_json))
+    #requests.post('http://10.42.0.61:8069', json=data_json)
 
 #while True:
 #    lidar.start()
