@@ -48,6 +48,8 @@ travel_distance = 0
 max_distance = 0
 scan_data = [0]*360
 
+tmp_cnt = 0
+
 counter = 0
 
 """ [Local Functions] """
@@ -72,8 +74,19 @@ def pid_calculations():
     GPIO.output(UART_PI_2_PICO_PIN, False)
     ser.write("hello".encode())
     GPIO.output(UART_PI_2_PICO_PIN, True)
-def deg_to_rad(degrees):
-    return degrees * (math.pi / 180)
+
+def polar_to_cartesian(angle, distance):
+    """Convert polar coordinates to Cartesian coordinates."""
+    x = distance * np.cos(np.radians(angle))
+    y = distance * np.sin(np.radians(angle))
+    return np.array([x, y])
+
+def find_mag(vectors):
+    """Sum vectors given in polar coordinates and return the magnitude of the resultant vector."""
+    cartesian_vectors = np.array([polar_to_cartesian(angle, distance) for angle, distance in vectors])
+    resultant_cartesian = np.sum(cartesian_vectors, axis=0)
+    resultant_magnitude = np.linalg.norm(resultant_cartesian)
+    return resultant_magnitude
 
 def PID_control(scan_data):
     """
@@ -96,6 +109,20 @@ def PID_control(scan_data):
         lh_sum = np.sum(lh_vectors)
         rh_mag = np.linalg.norm(rh_sum)
         lh_mag = np.linalg.norm(lh_sum)
+
+    for angle, distance in enumerate(scan_data):
+        rh_vectors = []
+        lh_vectors = []
+        for angle, distance in enumerate(scan_data):
+            # Process Right Hand Vectors
+            if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
+                rh_vectors.append(angle, distance)
+            elif (angle >= 160 and angle <= 200):
+                lh_vectors.append(angle, distance)
+            else:
+                pass  # for now
+        rh_mag = find_mag(rh_vectors)
+        lh_mag = find_mag(lh_vectors)
         error = rh_mag - lh_mag
         deadband = 10
         print(f"Error calculated: {error} | RH {rh_mag} - LH {lh_mag}")
@@ -107,6 +134,7 @@ def PID_control(scan_data):
 
 
 def process_data(data):
+    global tmp_cnt
     global UART_Rdy
     global travel_distance
     if UART_Rdy != 1:
@@ -118,7 +146,9 @@ def process_data(data):
     UART_Rdy = 0
     travel_distance = 0
     ## PID CALCULATIONS
-    PID_control(data)
+    if tmp_cnt % 5 == 0:
+        PID_control(data)
+    tmp_cnt += 1
     print(json.dumps(data_json))
     # requests.post('http://10.42.0.61:8069', json=data_json)
 
