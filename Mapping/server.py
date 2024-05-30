@@ -58,7 +58,7 @@ def deg_to_rad(degrees):
 
 # Experimental WIP #
 def gen_file_out(data, car_distance):
-    with open('lidar_scans.txt', 'a') as fp:
+    with open('lidar_scans.json', 'w', encoding='utf-8') as fp:
         # Initialize x and y components
         x_sum = 0
         y_sum = 0
@@ -74,14 +74,20 @@ def gen_file_out(data, car_distance):
         if angle_resultant_deg < 0:
             angle_resultant_deg += 360
 
-        line = f"{{{angle_resultant_deg},{car_distance}}} {data}\n"
-        fp.writelines(line)
+        data_json = {
+            "angle" : angle_resultant_deg,
+            "car_distance" : car_distance,
+            "scans" : data
+        }
+        json.dump(data_json, fp)
 
+ # ssh oozmakappa@10.42.0.1
+ # btsbts07
 # ========================================= #
 #          === [Main Function] ===          #
 # ========================================= #
 if __name__ == '__main__':
-    open('lidar_scans.txt', 'w').close()  # Clear data.out file
+    open('lidar_scans.json', 'w').close()  # Clear data.out file
     if len(argv) == 2:
         run(port=int(argv[1]))
     else:

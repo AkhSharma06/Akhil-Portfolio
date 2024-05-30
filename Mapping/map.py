@@ -1,39 +1,11 @@
 import math
 import numpy as np
 import open3d as o3d
+import os
 import time
+import json
 
-def parse_data(input_str):
-    try:
-        # Split the line into two parts: angle-distance and distances array
-        parts = input_str.split(' ', 1)  # Split only at the first space
-        if len(parts) < 2:
-            print(f"Invalid input format: {input_str}")
-            return None, None, None
-        
-        # Extract and parse the angle and distance travelled
-        angle_distance_str = parts[0].strip('{}')
-        angle_distance_parts = angle_distance_str.split(',')
-        
-        if len(angle_distance_parts) < 2:
-            print(f"Invalid angle-distance format: {angle_distance_str}")
-            return None, None, None
-        
-        angle = float(angle_distance_parts[0])
-        distance_travelled = float(angle_distance_parts[1])
-        
-        # Extract and parse the distances array
-        distances_str = parts[1].strip('[]').strip()
-        if not distances_str:
-            print(f"Empty distances array: {input_str}")
-            return angle, distance_travelled, []
-        
-        distances = list(map(float, distances_str.split(',')))
-        return angle, distance_travelled, distances
-    except Exception as e:
-        print(f"Error parsing input data: {e}")
-        print(f"Input string causing error: {input_str}")
-        return None, None, None
+FILENAME = 'lidar_scans.json'
 
 def polar_to_cartesian(distances, translation):
     points = []
@@ -81,7 +53,10 @@ def update_translation(translation, distance_traveled, angle_degrees):
     translation[1] += distance_traveled * math.sin(angle_radians)
     return translation
 
-def process_and_display(filename):
+# Main Function
+variable_value = 0
+if True:
+    print("=== [Beginning Map Program] ===")
     # Initialize Open3D visualizer with specific window dimensions
     vis = o3d.visualization.Visualizer()
     vis.create_window(window_name='LiDAR Point Cloud', width=800, height=600)
@@ -96,64 +71,41 @@ def process_and_display(filename):
     vis.add_geometry(pcd)
 
     file_position = 0  # Keep track of the file pointer position
+    data_wait = 0
 
     # Loop to read data in chunks of three lines
     while True:
-        lines = []
-        try:
-            with open(filename, 'r') as file:
-                file.seek(file_position)  # Move to the last read position
-                for _ in range(3):
-                    line = file.readline().strip()
-                    if line:
-                        lines.append(line)
-                    else:
-                        break
-                file_position = file.tell()  # Update the file position
+        if os.path.exists(FILENAME):
+            data_wait = 0
+            with open(FILENAME, 'r') as fp:
+                data = json.load(fp)
+            # angle = data["angle"]
+            # distance_travelled = data["car_distance"]
+            distances = data["scans"]
 
-            if not lines:
-                print("No new data. Waiting for new data...")
-                time.sleep(1)
-                continue
+            # Convert to Cartesian coordinates with current translation
+            
+            new_points = polar_to_cartesian(distances, translation)
 
-            for i, line in enumerate(lines):
-                print(f"Processing line {i + 1}: {line}")
-                angle, distance_travelled, distances = parse_data(line)
+            # Add new points to the accumulated points
+            all_points.extend(new_points)
 
-                if angle is not None and distance_travelled is not None and distances is not None:
-                    print(f"Line {i + 1} Parsed Angle: {angle}")
-                    print(f"Line {i + 1} Parsed Distance Travelled: {distance_travelled}")
-                    print(f"Line {i + 1} Parsed Distances Array: {distances}")
-                    print()
+            # Create point cloud from all accumulated points
+            pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
+            pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
 
-                    # Convert to Cartesian coordinates with current translation
-                    new_points = polar_to_cartesian(distances, translation)
+            # Update the visualizer
+            vis.clear_geometries()
+            vis.add_geometry(pcd)
 
-                    # Add new points to the accumulated points
-                    all_points.extend(new_points)
+            # # Adjust view to fit all points
+            update_view(vis, pcd)
 
-                    # Create point cloud from all accumulated points
-                    pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
-                    pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
-
-                    # Update the visualizer
-                    vis.clear_geometries()
-                    vis.add_geometry(pcd)
-
-                    # Adjust view to fit all points
-                    update_view(vis, pcd)
-
-                    # Simulate movement by updating the translation
-                    translation = update_translation(translation, distance_travelled, angle)
-                else:
-                    print(f"Failed to parse data on line {i + 1}")
-
-            # Close the file after processing three lines
-            print("Processed 3 lines, closing the file to allow new data...")
-
-        except Exception as e:
-            print(f"Error reading file: {e}")
-
-# Example usage
-filename = 'data.txt'
-process_and_display(filename)
+            # Simulate movement by updating the translation
+            # translation = update_translation(translation, 0, 0)
+        else:
+            if data_wait == 0:
+                print("Waiting for JSON file to populate...")
+                data_wait = 1
+            time.sleep(0.05)
+            continue
