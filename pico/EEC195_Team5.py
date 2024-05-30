@@ -25,7 +25,7 @@ from math import pi
 MOTOR_FREQ = 5000  # 5kHz; optimal VNH freq
 SERVO_FREQ = 100
 MOTOR_SPD_MAX = 200000  # Based on MOTOR_FREQ ! Must Change if MOTOR_FREQ is modified
-TIMER_FREQ = 2  # Hz
+TIMER_FREQ = 4  # Hz
 COUNTS_TO_ROTATION = 3  # Number of counters per wheel rotation (aka # of tape pieces)
 
 """ [Initialization] """
@@ -37,6 +37,7 @@ Motor_CS = ADC(Pin(28))  # Optional Current Sensing Pin; Analog Read
 
 Servo_PWM = Pin(20, Pin.OUT)  # Servo Motor Pin Setup
 Motor_Spd = Pin(22, Pin.IN, Pin.PULL_DOWN)  # Color Sensor for Tracking Speed Pin Setup
+UART_Rdy = Pin(2, Pin.OUT)  # Interrupt Pin to set High when ready to transmit UART data
 
 # Initialize Pins for PWM and Set Frequency
 Motor_PWM = PWM(Motor_PWM, freq = MOTOR_FREQ)
@@ -147,6 +148,7 @@ def car_init():
 
 
 def car_stop():
+    timer.deinit()
     car_init()
 
 def spd_irq_handler(edge_type):
@@ -160,12 +162,14 @@ def spd_irq_handler(edge_type):
     counter += 1
 
 def send_sensor_data(speed):
+    UART_Rdy.value(1)
     if uart.write(speed.encode('utf-8')) < 0:
         print("Error sending UART message to pi")
     uart.flush()
+    UART_Rdy.value(0)
 
 
-def rx_irq_handler(edde_type):
+def rx_irq_handler(edge_type):
     b = uart.readline()
     try:
         msg = b.decode('utf-8')
@@ -180,6 +184,7 @@ def spd_counter(timer):
         distance = (counter / COUNTS_TO_ROTATION) * 4.1 * pi  # Distance formula 'Rotations * Wheel Dia * Pi = Inches'
         print(f'Traveled {distance} inches')
         traveled_distance += distance
+        send_sensor_data(str(distance))
     counter = 0
 
 
@@ -203,15 +208,11 @@ if True:
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
     timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
-    uart.irq(UART.RX_any, handler=rx_irq_handler)
+    # uart.irq(UART.RX_any, handler=rx_irq_handler)
 
     # Set Motor to Forward for 30%
-    #set_motor_dir('F')
-    #set_motor_spd(30)
-    #sleep(2)
+    set_motor_dir('F')
+    set_motor_spd(30)
+    sleep(2)
     
     car_stop()
-
-    while True:
-        send_sensor_data(65)
-        sleep(2)
