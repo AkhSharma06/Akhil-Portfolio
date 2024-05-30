@@ -13,7 +13,7 @@
 """
 """ [Imports] """
 from math import cos, sin, pi, floor
-from adafruit_rplidar import RPLidar
+from adafruit_rplidar import RPLidar, RPLidarException
 import requests
 import json
 import serial
@@ -21,6 +21,7 @@ import RPi.GPIO as GPIO
 
 """ [Constants] """
 UART_RDY_PIN = 23
+UART_PI_2_PICO_PIN = 24
 
 """ [Initializations] """
 ser = serial.Serial ("/dev/ttyS0", timeout=0)    #Open named port 
@@ -30,6 +31,7 @@ ser.baudrate = 115200 #Set baud rate to 9600
 UART_Rdy = 0  # Global flag for UART reading
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(UART_RDY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(UART_PI_2_PICO_PIN, GPIO.OUT)
 
 LIDAR_PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, LIDAR_PORT_NAME, timeout = 3)
@@ -56,7 +58,7 @@ def uart_irq_handler(channel):
         UART_Rdy = 1
         if travel_distance is None:
             UART_Rdy = -1
-    
+
 
 def process_data(data):
     global UART_Rdy
@@ -69,6 +71,7 @@ def process_data(data):
     }
     UART_Rdy = 0
     travel_distance = 0
+    ## PID CALCULATIONS
     print(json.dumps(data_json))
     requests.post('http://10.42.0.61:8069', json=data_json)
 
@@ -82,11 +85,20 @@ if True:
     try:
         print("=== [Beginning Lidar Scans] ===")
         for scan in lidar.iter_scans():
-            for(_, angle, distance) in scan:
-                scan_data[min([359, floor(angle)])] = distance
+            for(quality, angle, distance) in scan:
+                normalized_angle = min([359, floor(angle)])
+                if ((normalized_angle >= 340 and normalized_angle <= 360) or (normalized_angle <= 20 and normalized_angle >=0)) or (normalized_angle >= 160 and normalized_angle <= 200):
+                    scan_data[normalized_angle] = distance
             process_data(scan_data)
+    except RPLidarException:
+        print("Error has occured with LiDar. Shutting Down ")
+        lidar.stop()
+        lidar.stop_motor()
+        lidar.clear_input()
+        lidar.disconnect()
     except KeyboardInterrupt:
         print("Stopping")
         lidar.stop()
         lidar.stop_motor()
+        lidar.clear_input()
         lidar.disconnect()

@@ -50,6 +50,7 @@ last_distance = 0
 traveled_distance = 0
 
 # Init UART Communication Lines
+pi2pico = Pin(3, Pin.IN, Pin.PULL_DOWN)
 uart = UART(0, 115200, tx=Pin(0), rx=Pin(1))
 
 # ========================================= #
@@ -213,6 +214,6 @@ if True:
     # Set Motor to Forward for 30%
     set_motor_dir('F')
     set_motor_spd(30)
-    sleep(2)
+    sleep(4)
     
     car_stop()
