@@ -12,7 +12,8 @@
 \date       Initial: 05/19/24  |  Last: 05/29/24
 """
 """ [Imports] """
-from math import cos, sin, pi, floor
+import math
+import numpy as np
 from adafruit_rplidar import RPLidar, RPLidarException
 import requests
 import json
@@ -59,6 +60,40 @@ def uart_irq_handler(channel):
         if travel_distance is None:
             UART_Rdy = -1
 
+def deg_to_rad(degrees):
+    return degrees * (math.pi / 180)
+
+def PID_control(scan_data):
+    """
+    Handles PID control calculations based on input scan_data
+    
+    return: (motor_spd: int, motor_dir: char, servo_ang: int, servo_dir: char)
+      * motor_spd and servo_ang are returned as a percentage of the maximum i.e. (0 - 100%)
+    """
+
+    for angle, distance in enumerate(scan_data):
+        rh_vectors = []
+        lh_vectors = []
+        for angle, distance in enumerate(scan_data):
+            # Process Right Hand Vectors
+            if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
+                rh_vectors.append(angle, distance)
+            elif (angle >= 160 and angle <= 200):
+                lh_vectors.append(angle, distance)
+            else:
+                pass  # for now
+        rh_sum = np.sum(rh_vectors)
+        lh_sum = np.sum(lh_vectors)
+        rh_mag = np.linalg.norm(rh_sum)
+        lh_mag = np.linalg.norm(lh_sum)
+        error = rh_mag - lh_mag
+        deadband = 10
+        if error >= deadband:
+            print(f"Closer to Right Wall Turn Left !%")
+        elif error <= -deadband:
+            print(f"Closer to Left Wall Turn Right !")
+
+
 
 def process_data(data):
     global UART_Rdy
@@ -72,6 +107,7 @@ def process_data(data):
     UART_Rdy = 0
     travel_distance = 0
     ## PID CALCULATIONS
+    PID_control(data)
     print(json.dumps(data_json))
     requests.post('http://10.42.0.61:8069', json=data_json)
 
@@ -86,7 +122,7 @@ if True:
         print("=== [Beginning Lidar Scans] ===")
         for scan in lidar.iter_scans():
             for(quality, angle, distance) in scan:
-                normalized_angle = min([359, floor(angle)])
+                normalized_angle = min([359, math.floor(angle)])
                 if ((normalized_angle >= 340 and normalized_angle <= 360) or (normalized_angle <= 20 and normalized_angle >=0)) or (normalized_angle >= 160 and normalized_angle <= 200):
                     scan_data[normalized_angle] = distance
             process_data(scan_data)
