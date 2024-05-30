@@ -110,26 +110,25 @@ def PID_control(scan_data):
         rh_mag = np.linalg.norm(rh_sum)
         lh_mag = np.linalg.norm(lh_sum)
 
+    rh_vectors = []
+    lh_vectors = []
     for angle, distance in enumerate(scan_data):
-        rh_vectors = []
-        lh_vectors = []
-        for angle, distance in enumerate(scan_data):
-            # Process Right Hand Vectors
-            if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
-                rh_vectors.append(angle, distance)
-            elif (angle >= 160 and angle <= 200):
-                lh_vectors.append(angle, distance)
-            else:
-                pass  # for now
-        rh_mag = find_mag(rh_vectors)
-        lh_mag = find_mag(lh_vectors)
-        error = rh_mag - lh_mag
-        deadband = 10
-        print(f"Error calculated: {error} | RH {rh_mag} - LH {lh_mag}")
-        if error >= deadband:
-            print(f"Closer to Right Wall Turn Left !%")
-        elif error <= -deadband:
-            print(f"Closer to Left Wall Turn Right !")
+        # Process Right Hand Vectors
+        if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
+            rh_vectors.append(angle, distance)
+        elif (angle >= 160 and angle <= 200):
+            lh_vectors.append(angle, distance)
+        else:
+            pass  # for now
+    rh_mag = find_mag(rh_vectors)
+    lh_mag = find_mag(lh_vectors)
+    error = rh_mag - lh_mag
+    deadband = 10
+    print(f"Error calculated: {error} | RH {rh_mag} - LH {lh_mag}")
+    if error >= deadband:
+        print(f"Closer to Right Wall Turn Left !%")
+    elif error <= -deadband:
+        print(f"Closer to Left Wall Turn Right !")
 
 
 
