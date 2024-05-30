@@ -82,18 +82,16 @@ def PID_control(scan_data):
     return: (motor_spd: int, motor_dir: char, servo_ang: int, servo_dir: char)
       * motor_spd and servo_ang are returned as a percentage of the maximum i.e. (0 - 100%)
     """
-
+    rh_vectors = []
+    lh_vectors = []
     for angle, distance in enumerate(scan_data):
-        rh_vectors = []
-        lh_vectors = []
-        for angle, distance in enumerate(scan_data):
-            # Process Right Hand Vectors
-            if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
-                rh_vectors.append(angle, distance)
-            elif (angle >= 160 and angle <= 200):
-                lh_vectors.append(angle, distance)
-            else:
-                pass  # for now
+        # Process Right Hand Vectors
+        if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
+            rh_vectors.append((angle, distance))
+        elif (angle >= 160 and angle <= 200):
+            lh_vectors.append((angle, distance))
+        else:
+            pass  # for now
         rh_sum = np.sum(rh_vectors)
         lh_sum = np.sum(lh_vectors)
         rh_mag = np.linalg.norm(rh_sum)
