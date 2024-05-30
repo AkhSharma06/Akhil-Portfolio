@@ -25,8 +25,15 @@ UART_RDY_PIN = 23
 UART_PI_2_PICO_PIN = 24
 
 """ [Initializations] """
-ser = serial.Serial ("/dev/ttyS0", timeout=0)    #Open named port 
-ser.baudrate = 115200 #Set baud rate to 9600
+ser = serial.Serial(
+    port = '/dev/ttyS0',
+    baudrate=115200,
+    parity=serial.PARITY_NONE,
+    bytesize=serial.EIGHTBITS,
+    stopbits=serial.STOPBITS_ONE,
+    timeout=1
+)
+
 
 # Setup UART_Rdy pin on RPi (Dummy Interrupt)
 UART_Rdy = 0  # Global flag for UART reading
@@ -62,6 +69,11 @@ def uart_irq_handler(channel):
         if travel_distance is None:
             UART_Rdy = -1
 
+def pid_calculations():
+    #Write to Pico
+    GPIO.output(UART_PI_2_PICO_PIN, False)
+    ser.write("hello".encode())
+    GPIO.output(UART_PI_2_PICO_PIN, True)
 def polar_to_cartesian(angle, distance):
     """Convert polar coordinates to Cartesian coordinates."""
     x = distance * np.cos(np.radians(angle))
@@ -123,11 +135,11 @@ def process_data(data):
         PID_control(data)
     tmp_cnt += 1
     print(json.dumps(data_json))
-    requests.post('http://10.42.0.61:8069', json=data_json)
+    # requests.post('http://10.42.0.61:8069', json=data_json)
 
 #while True:
 #    lidar.start()
-
+GPIO.output(UART_PI_2_PICO_PIN, True)
 if True:
     # Setup Interrupt Handler (what is bouncetime?)
     GPIO.add_event_detect(UART_RDY_PIN, GPIO.RISING, callback=uart_irq_handler, bouncetime=200)

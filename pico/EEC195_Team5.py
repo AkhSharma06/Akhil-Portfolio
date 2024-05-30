@@ -163,6 +163,7 @@ def spd_irq_handler(edge_type):
     counter += 1
 
 def send_sensor_data(speed):
+    print("Sending Sensor data to Pi")
     UART_Rdy.value(1)
     if uart.write(speed.encode('utf-8')) < 0:
         print("Error sending UART message to pi")
@@ -171,7 +172,7 @@ def send_sensor_data(speed):
 
 
 def rx_irq_handler(edge_type):
-    b = uart.readline()
+    b = uart.read(5)
     try:
         msg = b.decode('utf-8')
         print(msg)
@@ -209,11 +210,14 @@ if True:
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
     timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
+    # pi2pico.irq(trigger = Pin.IRQ_FALLING, handler = rx_irq_handler)
     # uart.irq(UART.RX_any, handler=rx_irq_handler)
 
     # Set Motor to Forward for 30%
-    set_motor_dir('F')
-    set_motor_spd(30)
-    sleep(4)
+    # set_motor_dir('F')
+    #set_motor_spd(30)
+
+    while True:
+        i = 1
     
     car_stop()
