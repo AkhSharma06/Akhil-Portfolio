@@ -53,7 +53,7 @@ def update_translation(translation, distance_traveled, angle_degrees):
     return translation
 
 # Main Function
-variable_value = 0
+first_scan = 1
 if True:
     print("=== [Beginning Map Program] ===")
     # Initialize Open3D visualizer with specific window dimensions
@@ -69,7 +69,6 @@ if True:
     pcd = o3d.geometry.PointCloud()
     vis.add_geometry(pcd)
 
-    file_position = 0  # Keep track of the file pointer position
     data_wait = 0
 
     # Loop to read data in chunks of three lines
@@ -82,28 +81,57 @@ if True:
             except json.JSONDecodeError:
                 continue
             angle = 90
-            distance_traveled = data["car_distance"]
+            distance_traveled = float(data["car_distance"])
             distances = data["scans"]
+            if distance_traveled != 0 or first_scan == 1:
+                # for angle, distance in enumerate(distances):
+                #     if angle >= 350 or angle <= 30 or angle >= 160 or angle <= 190:
+                #         pass
+                #     else:
+                #         distances[angle] = 0
+                # Convert to Cartesian coordinates with current translation
+                new_points = polar_to_cartesian(distances, translation)
 
-            # Convert to Cartesian coordinates with current translation
-            new_points = polar_to_cartesian(distances, translation)
+                # Add new points to the accumulated points
+                all_points.extend(new_points)
 
-            # Add new points to the accumulated points
-            all_points.extend(new_points)
+                # Create point cloud from all accumulated points
+                pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
+                pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
 
-            # Create point cloud from all accumulated points
-            pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
-            pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
+                # Update the visualizer
+                vis.clear_geometries()
+                vis.add_geometry(pcd)
 
-            # Update the visualizer
-            vis.clear_geometries()
-            vis.add_geometry(pcd)
+                # # Adjust view to fit all points
+                update_view(vis, pcd)
 
-            # # Adjust view to fit all points
-            update_view(vis, pcd)
+                # Simulate movement by updating the translation
+                translation = update_translation(translation, distance_traveled, angle)
+                first_scan = 0
+            # elif first_scan == 1:
+            #     # Convert to Cartesian coordinates with current translation
+            #     new_points = polar_to_cartesian(distances, translation)
 
-            # Simulate movement by updating the translation
-            translation = update_translation(translation, distance_traveled, angle)
+            #     # Add new points to the accumulated points
+            #     all_points.extend(new_points)
+
+            #     # Create point cloud from all accumulated points
+            #     pcd.points = o3d.utility.Vector3dVector(np.array(all_points))
+            #     pcd.colors = o3d.utility.Vector3dVector(np.tile([1, 0, 0], (len(all_points), 1)))  # Red color
+
+            #     # Update the visualizer
+            #     vis.clear_geometries()
+            #     vis.add_geometry(pcd)
+
+            #     # # Adjust view to fit all points
+            #     update_view(vis, pcd)
+
+            #     # Simulate movement by updating the translation
+            #     translation = update_translation(translation, distance_traveled, angle)
+            #     first_scan = 0
+            else:
+                continue
         else:
             if data_wait == 0:
                 print("Waiting for JSON file to populate...")
