@@ -25,7 +25,8 @@ import time
 UART_RDY_PIN = 23
 UART_PI_2_PICO_PIN = 24
 PICO_DISABLE_PIN = 25
-KP = 0.6
+Ksd = 0.15
+Kfw = 0.3
 
 """ [Initializations] """
 ser = serial.Serial(
@@ -53,8 +54,10 @@ max_distance = 0
 scan_data = [0]*360
 
 tmp_cnt = 0
+max_kick = 0.1
 
 counter = 0
+kick_cd_counter = 0
 
 """ [Local Functions] """
 def uart_irq_handler(channel):
@@ -114,6 +117,14 @@ def find_mag(vectors):
     resultant_magnitude = np.linalg.norm(resultant_cartesian)
     return resultant_magnitude
 
+def find_smallest_angle(vectors):
+    min_distance = vectors[0][1]
+    for angle, distance in vectors:
+        if(distance < min_distance):
+            min_distance = distance
+            smallest_angle = angle
+    return smallest_angle, min_distance
+
 def find_longest_string_of_zeros(arr):
     max_length = 0
     current_length = 0
@@ -153,7 +164,7 @@ def PID_control(scan_data):
     fw_vectors = []
     for angle, distance in enumerate(scan_data):
         # Process Right Hand Vectors
-        if (angle >= 0 and angle <= 20) or (angle >= 340 and angle <= 360):
+        if (angle >= 0 and angle <= 20) or (angle <= 360 and angle >= 340):
             lh_vectors.append((angle, distance))
         elif (angle >= 160 and angle <= 200):
             rh_vectors.append((angle, distance))
@@ -165,33 +176,73 @@ def PID_control(scan_data):
     # Get the longest string of zeros array (the angle we want to be)
     zero_start, zero_end = find_longest_string_of_zeros(fw_vectors)
     zero_avg_angle = int((zero_start + zero_end) / 2)
-
     rh_mag = find_mag(rh_vectors)
     lh_mag = find_mag(lh_vectors)
-    # error = (rh_mag - lh_mag) * KP
-    error = (zero_avg_angle - 90)
-    #deadband = (rh_mag + lh_mag) * 0.1
-    #max_error =  (rh_mag + lh_mag) * 0.3
-    deadband = 2
-    max_error = 60
+
+    side_error = max((rh_mag - lh_mag), (lh_mag - rh_mag))
+    side_deadband = (rh_mag + lh_mag) * 0.5
+    side_max_error =  (rh_mag + lh_mag) * 0.9
+
+    fw_error = (zero_avg_angle - 90)
+    fw_deadband = 2
+    fw_max_error = 30
+
+    # adding a small kick
+    kick_deadband = 300 #mm
+    kick_angle, kick_distance = find_smallest_angle(fw_vectors)
+
+    percent_ang = 0
+    side_ang = 0
+
+    print(f"Side Error: {side_error} | rh {rh_mag} lh {lh_mag}")
+    # print(f"Foward Error {fw_error}")
+    # Check if fw error is greater than deadband and set percent ang if so
+    if fw_error > 90 + fw_deadband or fw_error < 90 - fw_deadband:
+        if (abs(fw_error) > fw_max_error):
+            percent_ang = 0.5
+        else:
+            percent_ang = (abs(fw_error) / fw_max_error) * Kfw
+        if zero_avg_angle < 90:
+            percent_ang = -percent_ang
+    
+    if side_error > side_deadband:
+        if (abs(side_error) > side_max_error):
+            side_ang = 0.15
+        else:
+            side_ang = (abs(side_error) / side_max_error) * Ksd
+        if lh_mag > rh_mag:
+            side_ang = -side_ang
+
+    
+    kick_cd_counter += 1
+    print(f"Foward Ang: {percent_ang} | Side Ang: {side_ang}")
+    percent_ang += side_ang
+    
     #print(f"Error calculated: {error} | RH {rh_mag} LH {lh_mag}")  
     # Go Right
-    if error >= deadband:
+    # if error >= deadband:
+    #     direction = 'R'
+    #     if error >= max_error:
+    #         percent_ang = 0.5
+    #     else:
+    #         percent_ang = error / max_error * 0.3
+    # # Go Left
+    # elif error <= -deadband:
+    #     direction = 'L'
+    #     if error <= -max_error:
+    #         percent_ang = 0.5
+    #     else:
+    #         percent_ang = error / max_error * 0.3
+    # else:
+    #     direction = 'N'
+    #     percent_ang = 0.0
+    if percent_ang > 0:
         direction = 'R'
-        if error >= max_error:
-            percent_ang = 0.5
-        else:
-            percent_ang = error / max_error * 0.3
-    # Go Left
-    elif error <= -deadband:
+    elif percent_ang < 0:
         direction = 'L'
-        if error <= -max_error:
-            percent_ang = 0.5
-        else:
-            percent_ang = error / max_error * 0.3
     else:
         direction = 'N'
-        percent_ang = 0.0
+    
     print(f"Direction {direction} | Percent Ang {percent_ang}")
     return direction, abs(percent_ang)
 
@@ -209,9 +260,9 @@ def process_data(data):
     UART_Rdy = 0
     travel_distance = 0
     ## PID CALCULATIONS
-    if tmp_cnt % 2 == 0:
-        direction, percent_ang = PID_control(data)
-        write_pid_ctrl(direction, percent_ang)
+    #if tmp_cnt % 2 == 0:
+    direction, percent_ang = PID_control(data)
+    write_pid_ctrl(direction, percent_ang)
        # print(json.dumps(data_json))
 
     tmp_cnt += 1

@@ -13,6 +13,7 @@
 
 """ [Imports] """
 from machine import ADC, Pin, PWM, Timer, UART
+import neopixel
 from time import sleep
 from math import pi
 
@@ -26,6 +27,8 @@ MOTOR_FREQ = 5000  # 5kHz; optimal VNH freq
 SERVO_FREQ = 100
 MOTOR_SPD_MAX = 200000  # Based on MOTOR_FREQ ! Must Change if MOTOR_FREQ is modified
 TIMER_FREQ = 4  # Hz
+LED_FREQ = 20 #hz
+LED_COUNT = 44
 COUNTS_TO_ROTATION = 3  # Number of counters per wheel rotation (aka # of tape pieces)
 
 """ [Initialization] """
@@ -51,6 +54,11 @@ traveled_distance = 0
 run = 1
 pid_dir = 'N'
 pid_ang = 0
+
+#LED FUn
+led_strip = neopixel.NeoPixel(Pin(9), LED_COUNT)
+led_timer = Timer()
+led_counter = 0
 
 # Init UART Communication Lines
 pi2pico = Pin(3, Pin.IN, Pin.PULL_DOWN)
@@ -211,6 +219,17 @@ def get_distance():
     print(f'Traveled {distance} inches since last func call')
     return distance
 
+def led_handler(timer):
+    global led_counter
+    offset = led_counter % 11
+    for i in range(0, LED_COUNT):
+        intensity = ((23*(i+offset)) % 11)
+        if intensity < 3:
+            intensity = 0
+        led_strip[i] = (intensity*2, 0, 0)
+    led_strip.write()
+    led_counter += 1
+
 # ========================================= #
 #          === [Main Function] ===          #
 # ========================================= #
@@ -220,6 +239,7 @@ if True:
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
     timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
+    led_timer.init(mode = Timer.PERIODIC, freq= LED_FREQ, callback = led_handler)
     pi2pico.irq(trigger = Pin.IRQ_RISING, handler = rx_irq_handler)
     Disable.irq(trigger = Pin.IRQ_RISING, handler = disable_irq_handler)
     # uart.irq(UART.RX_any, handler=rx_irq_handler)
