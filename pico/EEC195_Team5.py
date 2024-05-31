@@ -59,6 +59,7 @@ pid_ang = 0
 led_strip = neopixel.NeoPixel(Pin(9), LED_COUNT)
 led_timer = Timer()
 led_counter = 0
+turn_color = ''
 
 # Init UART Communication Lines
 pi2pico = Pin(3, Pin.IN, Pin.PULL_DOWN)
@@ -142,13 +143,16 @@ def set_servo(direction, percent_ang=0):
     if direction == 'R' or direction == 'r':
         # Range (1100000 -> 1500000)
         delta = 400000 * percent_ang
+        turn_color = 'R'
         Servo_PWM.duty_ns(int(1500000 - delta))
     elif direction == 'L' or direction == 'l':
         # Range (1500000 -> 1900000)
         delta = 400000 * percent_ang
         Servo_PWM.duty_ns(int(1500000 + delta))
+        turn_color = 'G'
     elif direction == 'N' or direction == 'n':
         Servo_PWM.duty_ns(1500000)
+        turn_color = 'B'
 
 
 def car_init():
@@ -162,6 +166,7 @@ def car_init():
 
 
 def car_stop():
+    turn_color == 'P'
     timer.deinit()
     car_init()
 
@@ -226,7 +231,14 @@ def led_handler(timer):
         intensity = ((23*(i+offset)) % 11)
         if intensity < 3:
             intensity = 0
-        led_strip[i] = (intensity*2, 0, 0)
+        if turn_color == 'R':
+            led_strip[i] = (intensity*2, 0, 0)
+        elif turn_color == 'G':
+            led_strip[i] = (0, intensity*2, 0)
+        elif turn_color == 'N':
+            led_strip[i] = (0,0,  intensity*2)
+        elif turn_color == 'P':
+            led_counter = (255*(led_counter %2), 0, 0)
     led_strip.write()
     led_counter += 1
 
