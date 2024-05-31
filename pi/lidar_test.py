@@ -25,9 +25,10 @@ import time
 UART_RDY_PIN = 23
 UART_PI_2_PICO_PIN = 24
 PICO_DISABLE_PIN = 25
+PICO_RDY_PIN = 16
 Ksd = 0.15
-Kfw = 0.3
-Ki = 0.001
+Kfw = 0.006
+Ki = 0.000015
 
 """ [Initializations] """
 ser = serial.Serial(
@@ -46,6 +47,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(UART_RDY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(UART_PI_2_PICO_PIN, GPIO.OUT)
 GPIO.setup(PICO_DISABLE_PIN, GPIO.OUT)
+GPIO.setup(PICO_RDY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 LIDAR_PORT_NAME = '/dev/ttyUSB0'
 lidar = RPLidar(None, LIDAR_PORT_NAME, timeout = 3)
@@ -61,6 +63,7 @@ counter = 0
 kick_cd_counter = 0
 
 fw_integral = 0
+pico_rdy = 0
 
 """ [Local Functions] """
 def uart_irq_handler(channel):
@@ -79,6 +82,11 @@ def uart_irq_handler(channel):
         UART_Rdy = 1
         if travel_distance is None:
             UART_Rdy = -1
+
+def pico_rdy_irq_handler(channel):
+    global pico_rdy
+    if channel == PICO_RDY_PIN:
+        pico_rdy = 1
 
 def write_pid_ctrl(direction, percent_ang):
     #Write to Pico
@@ -163,6 +171,7 @@ def PID_control(scan_data):
       * motor_spd and servo_ang are returned as a percentage of the maximum i.e. (0 - 100%)
     """
     global fw_integral
+    global pico_rdy
     rh_vectors = []
     lh_vectors = []
     fw_vectors = []
@@ -183,70 +192,32 @@ def PID_control(scan_data):
     rh_mag = find_mag(rh_vectors)
     lh_mag = find_mag(lh_vectors)
 
-    side_error = max((rh_mag - lh_mag), (lh_mag - rh_mag))
-    side_deadband = (rh_mag + lh_mag) * 0.5
-    side_max_error =  (rh_mag + lh_mag) * 0.9
-
     fw_error = (zero_avg_angle - 90)
     fw_deadband = 2
-    fw_max_error = 30
 
-    if zero_avg_angle < 90:
-        fw_integral -= fw_error * Ki
-    else:
-        fw_integral += fw_error * Ki
-
-    # adding a small kick
-    kick_deadband = 300 #mm
-    kick_angle, kick_distance = find_smallest_angle(fw_vectors)
+    # If Pico Is Ready, Enable Integral Term
+    if pico_rdy == 1:
+        if zero_avg_angle < 90:
+            fw_integral += fw_error * Ki
+            fw_integral = max(-0.3, fw_integral)
+        else:
+            fw_integral += fw_error * Ki
+            fw_integral = min(0.3, fw_integral)
 
     percent_ang = 0
-    side_ang = 0
 
-    # print(f"Side Error: {side_error} | rh {rh_mag} lh {lh_mag}")
-    # print(f"Foward Error {fw_error}")
     # Check if fw error is greater than deadband and set percent ang if so
     if fw_error > 90 + fw_deadband or fw_error < 90 - fw_deadband:
-        if (abs(fw_error) > fw_max_error):
-            percent_ang = 0.5
-        else:
-            percent_ang = (abs(fw_error) / fw_max_error) * Kfw
+        percent_ang = abs(fw_error) * Kfw
+        percent_ang = min(0.5, percent_ang)
         if zero_avg_angle < 90:
             percent_ang = -percent_ang
     
-    if side_error > side_deadband:
-        if (abs(side_error) > side_max_error):
-            side_ang = 0.15
-        else:
-            side_ang = (abs(side_error) / side_max_error) * Ksd
-        if lh_mag > rh_mag:
-            side_ang = -side_ang
-
-    
-    kick_cd_counter += 1
-    print(f"Fw P%: {round(percent_ang, 3)}  Fw I%: {round(fw_integral, 3)}  Sd P%: {round(side_ang, 3)}")
-    percent_ang += side_ang
+    print(f"Fw P%: {round(percent_ang, 3)}  Fw I%: {round(fw_integral, 3)}  FW Error: {round(fw_error, 3)}")
+ 
     percent_ang += fw_integral
-    print(f"+ Total % {round(percent_ang, 3)}\n\n")
     
-    #print(f"Error calculated: {error} | RH {rh_mag} LH {lh_mag}")  
-    # Go Right
-    # if error >= deadband:
-    #     direction = 'R'
-    #     if error >= max_error:
-    #         percent_ang = 0.5
-    #     else:
-    #         percent_ang = error / max_error * 0.3
-    # # Go Left
-    # elif error <= -deadband:
-    #     direction = 'L'
-    #     if error <= -max_error:
-    #         percent_ang = 0.5
-    #     else:
-    #         percent_ang = error / max_error * 0.3
-    # else:
-    #     direction = 'N'
-    #     percent_ang = 0.0
+    # Determine Direction to Turn
     if percent_ang > 0:
         direction = 'R'
     elif percent_ang < 0:
@@ -254,7 +225,7 @@ def PID_control(scan_data):
     else:
         direction = 'N'
     
-    print(f"Direction {direction} | Percent Ang {percent_ang}")
+    print(f"+ Total % {round(percent_ang, 3)} Dir {direction} \n\n")
     return direction, abs(percent_ang)
 
 
@@ -285,6 +256,7 @@ if True:
     GPIO.output(UART_PI_2_PICO_PIN, False)
     GPIO.output(PICO_DISABLE_PIN, False)
     GPIO.add_event_detect(UART_RDY_PIN, GPIO.RISING, callback=uart_irq_handler, bouncetime=200)
+    GPIO.add_event_detect(PICO_RDY_PIN, GPIO.RISING, callback=pico_rdy_irq_handler, bouncetime=200)
     try:
         print("=== [Beginning Lidar Scans] ===")
         for scan in lidar.iter_scans():
