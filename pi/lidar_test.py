@@ -27,6 +27,7 @@ UART_PI_2_PICO_PIN = 24
 PICO_DISABLE_PIN = 25
 Ksd = 0.15
 Kfw = 0.3
+Ki = 0.001
 
 """ [Initializations] """
 ser = serial.Serial(
@@ -58,6 +59,8 @@ max_kick = 0.1
 
 counter = 0
 kick_cd_counter = 0
+
+fw_integral = 0
 
 """ [Local Functions] """
 def uart_irq_handler(channel):
@@ -159,6 +162,7 @@ def PID_control(scan_data):
     return: (motor_spd: int, motor_dir: char, servo_ang: int, servo_dir: char)
       * motor_spd and servo_ang are returned as a percentage of the maximum i.e. (0 - 100%)
     """
+    global fw_integral
     rh_vectors = []
     lh_vectors = []
     fw_vectors = []
@@ -187,6 +191,11 @@ def PID_control(scan_data):
     fw_deadband = 2
     fw_max_error = 30
 
+    if zero_avg_angle < 90:
+        fw_integral -= fw_error * Ki
+    else:
+        fw_integral += fw_error * Ki
+
     # adding a small kick
     kick_deadband = 300 #mm
     kick_angle, kick_distance = find_smallest_angle(fw_vectors)
@@ -194,7 +203,7 @@ def PID_control(scan_data):
     percent_ang = 0
     side_ang = 0
 
-    print(f"Side Error: {side_error} | rh {rh_mag} lh {lh_mag}")
+    # print(f"Side Error: {side_error} | rh {rh_mag} lh {lh_mag}")
     # print(f"Foward Error {fw_error}")
     # Check if fw error is greater than deadband and set percent ang if so
     if fw_error > 90 + fw_deadband or fw_error < 90 - fw_deadband:
@@ -215,8 +224,10 @@ def PID_control(scan_data):
 
     
     kick_cd_counter += 1
-    print(f"Foward Ang: {percent_ang} | Side Ang: {side_ang}")
+    print(f"Fw P%: {round(percent_ang, 3)}  Fw I%: {round(fw_integral, 3)}  Sd P%: {round(side_ang, 3)}")
     percent_ang += side_ang
+    percent_ang += fw_integral
+    print(f"+ Total % {round(percent_ang, 3)}\n\n")
     
     #print(f"Error calculated: {error} | RH {rh_mag} LH {lh_mag}")  
     # Go Right
