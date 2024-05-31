@@ -27,7 +27,7 @@ MOTOR_FREQ = 5000  # 5kHz; optimal VNH freq
 SERVO_FREQ = 100
 MOTOR_SPD_MAX = 200000  # Based on MOTOR_FREQ ! Must Change if MOTOR_FREQ is modified
 TIMER_FREQ = 4  # Hz
-LED_FREQ = 20 #hz
+LED_FREQ = 5 #hz
 LED_COUNT = 44
 COUNTS_TO_ROTATION = 3  # Number of counters per wheel rotation (aka # of tape pieces)
 
@@ -46,15 +46,6 @@ UART_Rdy = Pin(2, Pin.OUT)  # Interrupt Pin to set High when ready to transmit U
 Motor_PWM = PWM(Motor_PWM, freq = MOTOR_FREQ)
 Servo_PWM = PWM(Servo_PWM, freq = SERVO_FREQ)
 
-# Init Globals
-timer = Timer()
-counter = 0
-last_distance = 0
-traveled_distance = 0
-run = 1
-pid_dir = 'N'
-pid_ang = 0
-
 #LED FUn
 led_strip = neopixel.NeoPixel(Pin(9), LED_COUNT)
 led_timer = Timer()
@@ -66,6 +57,17 @@ pi2pico = Pin(3, Pin.IN, Pin.PULL_DOWN)
 uart = UART(0, 115200, tx=Pin(0), rx=Pin(1), timeout=2)
 
 Disable = Pin(4, Pin.IN, Pin.PULL_DOWN)
+Pico_Rdy = Pin(5, Pin.OUT)
+
+# Init Globals
+timer = Timer()
+counter = 0
+last_distance = 0
+traveled_distance = 0
+run = 1
+pid_dir = 'N'
+pid_ang = 0
+pid_brake = 'F'
 
 # ========================================= #
 #         === [Local Functions] ===         #
@@ -126,6 +128,7 @@ def set_motor_spd(percent_spd):
 
 
 def set_servo(direction, percent_ang=0):
+    global turn_color
     """
     Sets servo to desired direction and at the percentage of that direction.
     100% percent in a direction correlates to roughly ~ 45 degrees
@@ -166,6 +169,7 @@ def car_init():
 
 
 def car_stop():
+    global turn_color
     turn_color == 'P'
     timer.deinit()
     car_init()
@@ -197,9 +201,10 @@ def send_sensor_data(speed):
 def rx_irq_handler(edge_type):
     global pid_dir
     global pid_ang
+    global pid_brake
     sleep(0.03)
     message = uart.readline().decode('utf-8')
-    pid_dir, percent_ang = (message.strip('\n')).split(' ')
+    pid_dir, percent_ang, pid_brake = (message.strip('\n')).split(' ')
     pid_ang = float(percent_ang)
 
 def spd_counter(timer):
@@ -238,7 +243,9 @@ def led_handler(timer):
         elif turn_color == 'N':
             led_strip[i] = (0,0,  intensity*2)
         elif turn_color == 'P':
-            led_counter = (255*(led_counter %2), 0, 0)
+            led_strip[i] = (0, 10*(led_counter %10), 0)
+        else:
+            led_strip[i] = (128*(led_counter %2), 0, 0)
     led_strip.write()
     led_counter += 1
 
@@ -246,21 +253,25 @@ def led_handler(timer):
 #          === [Main Function] ===          #
 # ========================================= #
 if True:
+    Pico_Rdy.value(0)
+    led_timer.init(mode = Timer.PERIODIC, freq= LED_FREQ, callback = led_handler)
     # Init
     program_header()
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
     timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
-    led_timer.init(mode = Timer.PERIODIC, freq= LED_FREQ, callback = led_handler)
+    
     pi2pico.irq(trigger = Pin.IRQ_RISING, handler = rx_irq_handler)
     Disable.irq(trigger = Pin.IRQ_RISING, handler = disable_irq_handler)
     # uart.irq(UART.RX_any, handler=rx_irq_handler)
 
     while run:
+        Pico_Rdy.value(1)
         # Set Motor to Forward for 30%
         set_servo(pid_dir, pid_ang)
-        set_motor_dir('F')
-        set_motor_spd(0.22)
+        set_motor_dir(pid_brake)
+        set_motor_spd(0.21)
         sleep(0.2)
 
+    Pico_Rdy.value(0)
     car_stop()

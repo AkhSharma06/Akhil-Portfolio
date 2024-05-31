@@ -27,7 +27,7 @@ UART_PI_2_PICO_PIN = 24
 PICO_DISABLE_PIN = 25
 PICO_RDY_PIN = 16
 Ksd = 0.15
-Kfw = 0.006
+Kfw = 0.008
 Ki = 0.000015
 
 """ [Initializations] """
@@ -88,10 +88,10 @@ def pico_rdy_irq_handler(channel):
     if channel == PICO_RDY_PIN:
         pico_rdy = 1
 
-def write_pid_ctrl(direction, percent_ang):
+def write_pid_ctrl(direction, percent_ang, brake):
     #Write to Pico
     GPIO.output(UART_PI_2_PICO_PIN, True)
-    message = direction + ' ' + str(percent_ang) + '\n'
+    message = direction + ' ' + str(percent_ang) + ' ' + brake + '\n'
     #print(message)
     ser.write(message.encode())
     ser.flush()
@@ -161,7 +161,7 @@ def find_longest_string_of_zeros(arr):
         max_start_index = current_start_index
         max_end_index = len(arr) - 1
 
-    return max_start_index, max_end_index
+    return max_length, max_start_index, max_end_index
 
 def PID_control(scan_data):
     """
@@ -186,36 +186,84 @@ def PID_control(scan_data):
             # print(fw_vectors)
         else:
             pass  # for now
+
+    """ Target Angle """
     # Get the longest string of zeros array (the angle we want to be)
-    zero_start, zero_end = find_longest_string_of_zeros(fw_vectors)
-    zero_avg_angle = int((zero_start + zero_end) / 2)
-    rh_mag = find_mag(rh_vectors)
-    lh_mag = find_mag(lh_vectors)
+    zero_length, zero_start, zero_end = find_longest_string_of_zeros(fw_vectors)
+    largest_sum_index = -1
+    max_sum = 0
+    brake = 'F'
+    target_distance = 0
+    if zero_length < 5:
+        print("!!Non Zero Target Selected!!")
+        for i in range(len(fw_vectors) -5):
+            current_sum = sum(fw_vectors[j][1] for j in range(i, i + 5))
+            if current_sum > max_sum:
+                max_sum = current_sum
+                largest_sum_index = i
+                target_distance = max_sum / 5
+        if target_distance > 1250:
+            target_angle = fw_vectors[largest_sum_index + 2][0]
+        else:
+            brake = 'N'
+    else:
+        target_angle = int((zero_start + zero_end) / 2)
 
-    fw_error = (zero_avg_angle - 90)
+    percent_ang = 0
+    fw_error = (target_angle - 90)
     fw_deadband = 2
+    
+    """ Proportion """
+    # Check if fw error is greater than deadband and set percent ang if so
+    if fw_error > 90 + fw_deadband or fw_error < 90 - fw_deadband:
+        percent_ang = abs(fw_error) * Kfw
+        percent_ang = min(0.6, percent_ang)
+        if target_angle < 90:
+            percent_ang = -percent_ang
+        fw_ang = percent_ang
 
+    """ Integral """
     # If Pico Is Ready, Enable Integral Term
     if pico_rdy == 1:
-        if zero_avg_angle < 90:
+        if target_angle < 90:
             fw_integral += fw_error * Ki
             fw_integral = max(-0.3, fw_integral)
         else:
             fw_integral += fw_error * Ki
             fw_integral = min(0.3, fw_integral)
-
-    percent_ang = 0
-
-    # Check if fw error is greater than deadband and set percent ang if so
-    if fw_error > 90 + fw_deadband or fw_error < 90 - fw_deadband:
-        percent_ang = abs(fw_error) * Kfw
-        percent_ang = min(0.5, percent_ang)
-        if zero_avg_angle < 90:
-            percent_ang = -percent_ang
-    
-    print(f"Fw P%: {round(percent_ang, 3)}  Fw I%: {round(fw_integral, 3)}  FW Error: {round(fw_error, 3)}")
- 
     percent_ang += fw_integral
+
+    """ Obstacle Avoidance """
+    obstacle_avoid_tol = 500
+    obstacle_ang = 0
+    angle_left = -1
+    angle_right = -1
+    dist_short_l = obstacle_avoid_tol + 1
+    dist_short_r = obstacle_avoid_tol + 1
+    for (angle, distance) in fw_vectors[zero_start-5: zero_start]:
+        if distance <= obstacle_avoid_tol and distance < dist_short_l and distance > 0:
+            angle_left = angle
+            dist_short_l = distance
+    if(dist_short_l < obstacle_avoid_tol):
+        print(f"Close Wall Detected Left at Ang: {angle_left} Dist: {dist_short_l}")
+    
+    for (angle, distance) in fw_vectors[zero_end: zero_end + 5]:
+        if distance <= obstacle_avoid_tol and distance < dist_short_r and distance > 0:
+            angle_right = angle
+            dist_short_r = distance
+
+    if(dist_short_r < obstacle_avoid_tol):
+        print(f"Close Wall Detected Right at Ang: {angle_right} Dist: {dist_short_r}")
+    
+    # Krabby Patty Secret Formula
+    if(dist_short_r < dist_short_l):
+        obstacle_ang = 0.2 + (-0.05 / 350) * (dist_short_r - 150)
+        percent_ang += obstacle_ang
+    elif(dist_short_r > dist_short_l):
+        obstacle_ang = 0.2 + (-0.05 / 350) * (dist_short_l - 150) 
+        percent_ang -= obstacle_ang
+    
+    print(f"T Ang: {target_angle} T Dist: {target_distance}\n+ Fw P%: {round(fw_ang, 3)}  Fw I%: {round(fw_integral, 3)}  Ob %: {round(obstacle_ang, 3)}")
     
     # Determine Direction to Turn
     if percent_ang > 0:
@@ -225,8 +273,8 @@ def PID_control(scan_data):
     else:
         direction = 'N'
     
-    print(f"+ Total % {round(percent_ang, 3)} Dir {direction} \n\n")
-    return direction, abs(percent_ang)
+    print(f"=== [Total % {round(percent_ang, 3)} Dir {direction} Motor Dir {brake}] ===\n\n")
+    return direction, abs(percent_ang), brake
 
 
 def process_data(data):
@@ -243,8 +291,8 @@ def process_data(data):
     travel_distance = 0
     ## PID CALCULATIONS
     #if tmp_cnt % 2 == 0:
-    direction, percent_ang = PID_control(data)
-    write_pid_ctrl(direction, percent_ang)
+    direction, percent_ang ,brake = PID_control(data)
+    write_pid_ctrl(direction, percent_ang, brake)
        # print(json.dumps(data_json))
 
     tmp_cnt += 1
