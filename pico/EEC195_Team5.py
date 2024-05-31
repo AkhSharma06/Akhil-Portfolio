@@ -48,10 +48,15 @@ timer = Timer()
 counter = 0
 last_distance = 0
 traveled_distance = 0
+run = 1
+pid_dir = 'N'
+pid_ang = 0
 
 # Init UART Communication Lines
 pi2pico = Pin(3, Pin.IN, Pin.PULL_DOWN)
-uart = UART(0, 115200, tx=Pin(0), rx=Pin(1))
+uart = UART(0, 115200, tx=Pin(0), rx=Pin(1), timeout=2)
+
+Disable = Pin(4, Pin.IN, Pin.PULL_DOWN)
 
 # ========================================= #
 #         === [Local Functions] ===         #
@@ -102,12 +107,12 @@ def set_motor_spd(percent_spd):
     Sets motor to desired speed as a percent of the MAXIMUM speed.
     !! set_motor_dir SHOULD be called before this function !!
 
-    :param percent_spd <int>: Sets motor to desired speed. Acceptable Range (0% - 100%)
+    :param percent_spd <float>: Sets motor to desired speed. Acceptable Range (0.0 - 1.0)
     :return: none
     """
-    if percent_spd < 0 or percent_spd > 100:
+    if percent_spd < 0 or percent_spd > 1:
         return
-    duty_cycle = MOTOR_SPD_MAX * percent_spd / 100.0  # Convert Percent Speed to Duty Cycle in ns
+    duty_cycle = MOTOR_SPD_MAX * percent_spd  # Convert Percent Speed to Duty Cycle in ns
     Motor_PWM.duty_ns(int(duty_cycle))
 
 
@@ -120,20 +125,20 @@ def set_servo(direction, percent_ang=0):
         + 'R': Right
         + 'L': Left
         + 'N': Neutral
-    :param percent_ang <int>: Turns to a percentage of the maximum angle. Range (0% - 100%)
-        * Note: percent_angle is not used in neutral setting. 100% = Max angle ~ 45 degrees
+    :param percent_ang <float>: Turns to a percentage of the maximum angle. Range (0.0 - 1.0)
+        * Note: percent_angle is not used in neutral setting. 1.0 = Max angle ~ 45 degrees
     :return: none
     """
-    if percent_ang < 0 or percent_ang > 100:
+    if percent_ang < 0 or percent_ang > 1:
         return
     if direction == 'R' or direction == 'r':
         # Range (1100000 -> 1500000)
         delta = 400000 * percent_ang
-        Servo_PWM.duty_ns(1500000 - delta)
+        Servo_PWM.duty_ns(int(1500000 - delta))
     elif direction == 'L' or direction == 'l':
         # Range (1500000 -> 1900000)
         delta = 400000 * percent_ang
-        Servo_PWM.duty_ns(1500000 + delta)
+        Servo_PWM.duty_ns(int(1500000 + delta))
     elif direction == 'N' or direction == 'n':
         Servo_PWM.duty_ns(1500000)
 
@@ -152,6 +157,10 @@ def car_stop():
     timer.deinit()
     car_init()
 
+def disable_irq_handler(edge_type):
+    global run
+    run = 0
+
 def spd_irq_handler(edge_type):
     """
     Interrupt handler for speed sensor
@@ -164,6 +173,7 @@ def spd_irq_handler(edge_type):
 
 def send_sensor_data(speed):
     print("Sending Sensor data to Pi")
+    speed = speed +'\n'
     UART_Rdy.value(1)
     if uart.write(speed.encode('utf-8')) < 0:
         print("Error sending UART message to pi")
@@ -172,12 +182,12 @@ def send_sensor_data(speed):
 
 
 def rx_irq_handler(edge_type):
-    b = uart.read(5)
-    try:
-        msg = b.decode('utf-8')
-        print(msg)
-    except:
-        pass
+    global pid_dir
+    global pid_ang
+    sleep(0.03)
+    message = uart.readline().decode('utf-8')
+    pid_dir, percent_ang = (message.strip('\n')).split(' ')
+    pid_ang = float(percent_ang)
 
 def spd_counter(timer):
     global counter
@@ -210,14 +220,15 @@ if True:
     car_init()
     Motor_Spd.irq(trigger = Pin.IRQ_RISING, handler = spd_irq_handler)
     timer.init(mode = Timer.PERIODIC, freq = TIMER_FREQ, callback = spd_counter)
-    # pi2pico.irq(trigger = Pin.IRQ_FALLING, handler = rx_irq_handler)
+    pi2pico.irq(trigger = Pin.IRQ_RISING, handler = rx_irq_handler)
+    Disable.irq(trigger = Pin.IRQ_RISING, handler = disable_irq_handler)
     # uart.irq(UART.RX_any, handler=rx_irq_handler)
 
-    # Set Motor to Forward for 30%
-    # set_motor_dir('F')
-    #set_motor_spd(30)
+    while run:
+        # Set Motor to Forward for 30%
+        set_servo(pid_dir, pid_ang)
+        set_motor_dir('F')
+        set_motor_spd(0.22)
+        sleep(0.2)
 
-    while True:
-        i = 1
-    
     car_stop()
