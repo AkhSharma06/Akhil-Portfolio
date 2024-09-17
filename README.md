@@ -1,10 +1,4 @@
-Ah, I see! If you want your README to dive deeper into the specifics of the code, such as the purpose, architecture, technical details, and how the project works, I can adjust it accordingly.
-
-Here’s a more **technical-focused** README template that talks about the code structure, technology stack, setup instructions, and how the project works:
-
----
-
-# Akhil Sharma's Portfolio Projects
+# Akhil Sharma's Portfolio of Projects
 
 This repository showcases my personal projects, where I applied my skills in various domains like autonomous systems, embedded systems, full-stack development, and data structures. Below are detailed breakdowns of each project, including their technical aspects, architecture, and the specific code implementations.
 
