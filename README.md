@@ -7,7 +7,7 @@ This repository showcases my personal projects, where I applied my skills in var
 ## 1. **Dora the Explora: Autonomous Vehicle Project**
 **Duration**: January – May 2024
 
-**Project Summary**: This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation.
+**Project Summary**: This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4, earning a Final Demonstration Grade of 96%.
 
 ### **Technical Stack**:
 - **Hardware**: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8
