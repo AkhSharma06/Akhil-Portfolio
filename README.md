@@ -104,8 +104,4 @@ This repository showcases my personal projects, where I applied my skills in var
 ---
 
 ## 📫 **Contact**
-For questions or collaborations, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/akhilsharma) or [email](mailto:akhilsharma@gmail.com).
-
----
-
-This version includes more detailed technical explanations, code breakdowns, and key files for each project. It gives an in-depth look into the workings of your code, making it more informative for potential collaborators or employers.
+For questions or collaborations, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/akhilsharma) or [School Email](mailto:akhsharma@ucdavis.edu) or [Personal Email](mailto:theakkuking@gmail.com).
