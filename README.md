@@ -70,19 +70,19 @@ This repository showcases my personal projects, where I applied my skills in var
 ## 4. **Zip/Unzip Data Structures Project**
 **Duration**: March – April 2022
 
-**Project Summary**: A C/C++ project that implements a data compression algorithm using tree map data structures, reducing data storage space and improving access efficiency.
+**Project Summary**: This project implements a data compression and decompression system in C/C++, leveraging Huffman Tree data structures to optimize storage space and improve data access efficiency. The project includes two main components: zap.c for compression (zipping) and unzap.c for decompression (unzipping), providing a practical demonstration of Huffman encoding.
 
 ### **Technical Stack**:
 - **Language**: C/C++
-- **Data Structures**: Tree map (custom implementation for key-value pair storage)
+- **Data Structures**: Huffman Tree (custom implementation for efficient key-value pair storage)
 
 ### **Code Breakdown**:
-- **Tree Map**: A tree map structure is used to compress and store data efficiently, improving both access and retrieval times.
-- **Compression Algorithm**: The algorithm reads input data, maps each unique value to a tree node, and compresses it using a custom logic based on frequency.
+- **Huffman Tree Map**: A custom Huffman Tree is implemented to assign variable-length codes to input characters based on their frequency, maximizing compression efficiency. This allows for optimized storage and faster retrieval.
+- **Compression Algorithm**: The algorithm constructs the Huffman Tree using a priority queue, encoding data by mapping each unique value to a tree node. The more frequent a value, the shorter its assigned code, resulting in reduced data size.
 
 ### **Key Files**:
-- `compression.cpp`: Handles the logic for compressing and decompressing data using tree map structures.
-- `tree_map.h`: Implements the tree map data structure.
+- `zap.c`: Manages the data compression process, constructing the Huffman Tree and encoding input data into its compressed format.
+- `unzap.c`: Handles decompression by reconstructing the Huffman Tree and decoding the compressed data back to its original form.
 
 ---
 
