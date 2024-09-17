@@ -7,7 +7,7 @@ This repository showcases my personal projects, where I applied my skills in var
 ## 1. **Dora the Explora: Autonomous Vehicle Project**
 **Duration**: January – May 2024
 
-**Project Summary**: This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4, earning a Final Demonstration Grade of 96%.
+**Project Summary**: This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.
 
 ### **Technical Stack**:
 - **Hardware**: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8
@@ -28,7 +28,7 @@ This repository showcases my personal projects, where I applied my skills in var
 ## 2. **SwivelFind: Embedded Systems Final Project**
 **Duration**: January – March 2024
 
-**Project Summary**: A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote.
+**Project Summary**: A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote. Completed in a group of 2 with Corbin Warmbier. Received Honorary Mention for Exceptional Project 
 
 ### **Technical Stack**:
 - **Hardware**: Ultrasonic Sensor (UART), OLED Display (SPI), Stepper Motor (PWM)
