@@ -46,7 +46,7 @@ This repository showcases my personal projects, where I applied my skills in var
 ---
 
 ## 3. **CEC’s Café App: Full Stack Development**
-**Duration**: June 2023
+**Duration**: June 2023 - Currently (Still in Progress)
 
 **Project Summary**: This project is a full-stack web application developed for a café to manage online orders. It features a fully functional UI and integrates a backend server with a database for order management.
 
