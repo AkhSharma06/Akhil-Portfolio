@@ -97,7 +97,7 @@ This repository showcases my personal projects, where I applied my skills in var
 ## 📝 **How to Use This Repo**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/akhil_portfolio.git
+   git clone https://github.com/LuciferMorningstar21/Akhil-Portfolio.git
    ```
 2. Navigate to any project directory and follow the README inside for project-specific instructions.
 
