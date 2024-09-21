@@ -186,7 +186,7 @@
                 </div>
                 <div class="project-info">
                     <h2>Dora the Explora: Autonomous Vehicle Project</h2>
-                    <p class="project-summary">An autonomous RC car using LIDAR-based sensing for navigation. Senior Design Project with a final grade of 96%.</p>
+                    <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
                     <button onclick="toggleReadMore(this, 1)">Read More</button>
                     <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
                     <div class="read-more" id="read-more-1">
@@ -197,7 +197,11 @@
                             <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
                         </ul>
                         <p><strong>Code Breakdown:</strong></p>
-                        <p>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi. A 3D point cloud is generated using the Open3D library.</p>
+                        <ul>
+                            <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
+                            <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
+                            <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -209,7 +213,7 @@
                 </div>
                 <div class="project-info">
                     <h2>SwivelFind: Embedded Systems Final Project</h2>
-                    <p class="project-summary">A 360-degree swiveling rangefinder capable of detecting objects using an Ultrasonic Sensor. Honorary Mention for Exceptional Project.</p>
+                    <p class="project-summary"> A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote. Completed in a group of 2 with Corbin Warmbier. Received Honorary Mention for Exceptional Project </p>
                     <button onclick="toggleReadMore(this, 2)">Read More</button>
                     <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/SwivelFind';">View Code</button>
                     <div class="read-more" id="read-more-2">
@@ -219,7 +223,11 @@
                             <li>Software: Embedded C, AWS IoT (for cloud communication)</li>
                         </ul>
                         <p><strong>Code Breakdown:</strong></p>
-                        <p>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</p>
+                        <ul>
+                            <li>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</li>
+                            <li>Motor Control: A stepper motor is driven using Pulse Width Modulation (PWM) for precise rotation control.</li>
+                            <li>Remote Communication: The IR remote control is programmed to start and stop scanning. AWS IoT is used for remote data logging.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
