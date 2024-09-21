@@ -17,17 +17,24 @@
 
         .wrapper {
             display: flex;
-            max-width: 1200px;
-            margin: 20px;
+            max-width: 1400px; /* Increased width */
+            width: 100%;
+            margin: 0 20px;
+            padding-top: 50px; /* Added padding at the top */
         }
 
         .sidebar {
-            flex: 0 0 30%;
-            margin-right: 20px;
+            flex: 0 0 25%; /* Slightly smaller sidebar */
+            margin-right: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px; /* Align the top of the image with the project boxes */
         }
 
         .sidebar img {
             width: 100%;
+            max-width: 250px; /* Limit the image size */
             border-radius: 10px;
             margin-bottom: 20px;
         }
@@ -44,7 +51,9 @@
         }
 
         .main-content {
-            flex: 0 0 70%;
+            flex: 1; /* Takes up the rest of the space */
+            display: flex;
+            flex-direction: column;
         }
 
         header {
@@ -56,6 +65,9 @@
 
         .container {
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Adds space between project boxes */
         }
 
         .project {
@@ -63,13 +75,12 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
             display: flex;
             align-items: center;
         }
 
         .project-image {
-            flex: 0 0 30%;
+            flex: 0 0 25%;
             margin-right: 20px;
         }
 
@@ -79,7 +90,7 @@
         }
 
         .project-info {
-            flex: 0 0 70%;
+            flex: 1; /* Takes the remaining space */
         }
 
         .project h2 {
@@ -127,7 +138,7 @@
 <div class="wrapper">
     <!-- Sidebar with photo and about me -->
     <div class="sidebar">
-        <img src="https://via.placeholder.com/300" alt="Your Photo">
+        <img src="https://via.placeholder.com/250" alt="Your Photo">
         <h2>Akhil Sharma</h2>
         <p>Hello! I'm Akhil, a computer engineer passionate about autonomous systems, embedded systems, and full-stack development. I love building projects that merge hardware and software to create innovative solutions.</p>
     </div>
