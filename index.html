@@ -83,15 +83,16 @@
         }
 
         .project-image {
-            width: 100%;
-            max-width: 300px; /* Restrict image size */
-            border-radius: 8px;
-            margin-bottom: 10px;
+            flex: 0 0 25%;
+            margin-right: 20px;
         }
 
-        .project-info {
-            flex: 1;
-            padding-top: 10px;
+        .project-image img {
+            width: 100%;
+            max-width: 300px; /* Restrict the image size to 300x300 */
+            max-height: 300px;
+            border-radius: 8px;
+            object-fit: cover; /* Ensure the image fills the space while maintaining aspect ratio */
         }
 
         .project h2 {
