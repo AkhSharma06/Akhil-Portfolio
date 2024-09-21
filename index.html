@@ -77,21 +77,19 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
         }
 
         .project-image {
-            flex: 0 0 25%;
-            margin-right: 20px;
-        }
-
-        .project-image img {
             width: 100%;
             border-radius: 8px;
         }
 
         .project-info {
             flex: 1; /* Take the remaining space */
+            padding-top: 20px;
         }
 
         .project h2 {
@@ -116,6 +114,16 @@
             background-color: #8DD5E7;
         }
 
+        .read-more {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .project button.read-less {
+            display: none;
+            background-color: #ff4b4b;
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -133,6 +141,22 @@
             text-decoration: underline;
         }
     </style>
+    <script>
+        function toggleReadMore(button, projectId) {
+            var readMoreSection = document.getElementById('read-more-' + projectId);
+            var readLessButton = document.getElementById('read-less-' + projectId);
+            
+            if (readMoreSection.style.display === 'block') {
+                readMoreSection.style.display = 'none';
+                readLessButton.style.display = 'none';
+                button.style.display = 'block';
+            } else {
+                readMoreSection.style.display = 'block';
+                button.style.display = 'none';
+                readLessButton.style.display = 'block';
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -160,7 +184,18 @@
                 <div class="project-info">
                     <h2>Dora the Explora: Autonomous Vehicle Project</h2>
                     <p class="project-summary">An autonomous RC car using LIDAR-based sensing for navigation. Senior Design Project with a final grade of 96%.</p>
-                    <button onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
+                    <button onclick="toggleReadMore(this, 1)">Read More</button>
+                    <button id="read-less-1" class="read-less" onclick="toggleReadMore(this, 1)">Read Less</button>
+                    <div class="read-more" id="read-more-1">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
+                            <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
+                            <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <p>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi. A 3D point cloud is generated using the Open3D library.</p>
+                    </div>
                 </div>
             </div>
 
@@ -172,7 +207,17 @@
                 <div class="project-info">
                     <h2>SwivelFind: Embedded Systems Final Project</h2>
                     <p class="project-summary">A 360-degree swiveling rangefinder capable of detecting objects using an Ultrasonic Sensor. Honorary Mention for Exceptional Project.</p>
-                    <button onclick="window.location.href='https://github.com/AkhSharma06/SwivelFind';">View Code</button>
+                    <button onclick="toggleReadMore(this, 2)">Read More</button>
+                    <button id="read-less-2" class="read-less" onclick="toggleReadMore(this, 2)">Read Less</button>
+                    <div class="read-more" id="read-more-2">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Hardware: Ultrasonic Sensor (UART), OLED Display (SPI), Stepper Motor (PWM)</li>
+                            <li>Software: Embedded C, AWS IoT (for cloud communication)</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <p>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</p>
+                    </div>
                 </div>
             </div>
 
@@ -184,7 +229,18 @@
                 <div class="project-info">
                     <h2>CEC’s Café App: Full Stack Development</h2>
                     <p class="project-summary">A full-stack web application for managing online café orders, with a fully functional UI and integrated backend server.</p>
-                    <button onclick="window.location.href='https://github.com/AkhSharma06/CECs-Cafe-App';">View Code</button>
+                    <button onclick="toggleReadMore(this, 3)">Read More</button>
+                    <button id="read-less-3" class="read-less" onclick="toggleReadMore(this, 3)">Read Less</button>
+                    <div class="read-more" id="read-more-3">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Frontend: HTML, CSS, JavaScript, Figma (for UI/UX design)</li>
+                            <li>Backend: Node.js, Express</li>
+                            <li>Database: MongoDB</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <p>Frontend: The UI is designed using Figma and built using HTML and CSS. JavaScript handles form validation and async data fetching.</p>
+                    </div>
                 </div>
             </div>
 
@@ -196,7 +252,17 @@
                 <div class="project-info">
                     <h2>Zip/Unzip: Data Structures Project</h2>
                     <p class="project-summary">Data compression and decompression system using Huffman Tree data structures in C/C++.</p>
-                    <button onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Zip%20Unzip';">View Code</button>
+                    <button onclick="toggleReadMore(this, 4)">Read More</button>
+                    <button id="read-less-4" class="read-less" onclick="toggleReadMore(this, 4)">Read Less</button>
+                    <div class="read-more" id="read-more-4">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Language: C/C++</li>
+                            <li>Data Structures: Huffman Tree (custom implementation)</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <p>Compression Algorithm: The algorithm constructs the Huffman Tree using a priority queue, encoding data by mapping each unique value to a tree node.</p>
+                    </div>
                 </div>
             </div>
         </div>
