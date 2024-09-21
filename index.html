@@ -19,16 +19,16 @@
             display: flex;
             max-width: 1400px;
             width: 100%;
-            margin: 0 20px;
+            margin: 0; /* Remove margin to stretch content to the full width */
         }
 
         .sidebar {
-            flex: 0 0 20%; /* Smaller sidebar */
-            margin-right: 80px; /* Move sidebar more to the left */
+            flex: 0 0 15%; /* Sidebar narrower to allow more space for content */
+            margin-right: 20px; /* Smaller margin between sidebar and main content */
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 220px; /* Add padding to match project boxes */
+            padding-top: 180px; /* Adjusted padding for About Me picture */
         }
 
         .sidebar img {
@@ -48,7 +48,7 @@
         }
 
         .main-content {
-            flex: 1; /* Takes up the rest of the space */
+            flex-grow: 1; /* Make the main content expand to fill available space */
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -62,7 +62,7 @@
         }
 
         .container {
-            padding: 20px;
+            padding: 20px 0; /* Remove side padding so the content stretches */
             display: flex;
             flex-direction: column;
             gap: 20px; /* Adds space between project boxes */
@@ -88,7 +88,7 @@
         }
 
         .project-info {
-            flex: 1; /* Takes the remaining space */
+            flex: 1; /* Take the remaining space */
         }
 
         .project h2 {
