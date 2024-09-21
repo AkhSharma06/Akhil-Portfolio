@@ -19,21 +19,21 @@
             display: flex;
             max-width: 1800px;
             width: 100%;
-            margin: 0; /* Remove margin to stretch content to the full width */
+            margin: 0;
         }
 
         .sidebar {
-            flex: 0 0 20%; /* Sidebar narrower to allow more space for content */
-            margin-right: 20px; /* Smaller margin between sidebar and main content */
+            flex: 0 0 20%;
+            margin-right: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 180px; /* Adjusted padding for About Me picture */
+            padding-top: 180px;
         }
 
         .sidebar img {
             width: 100%;
-            max-width: 220px; /* Adjust the image size */
+            max-width: 220px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
@@ -48,7 +48,7 @@
         }
 
         .main-content {
-            flex-grow: 1; /* Make the main content expand to fill available space */
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -59,16 +59,16 @@
             color: white;
             padding: 20px;
             text-align: center;
-            border-radius: 8px; /* Same border-radius as project boxes */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Similar shadow to project boxes */
-            margin-bottom: 20px; /* Adds some space below the header */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         .container {
-            padding: 20px 0; /* Remove side padding so the content stretches */
+            padding: 20px 0;
             display: flex;
             flex-direction: column;
-            gap: 20px; /* Adds space between project boxes */
+            gap: 20px;
         }
 
         .project {
@@ -84,12 +84,14 @@
 
         .project-image {
             width: 100%;
+            max-width: 300px; /* Restrict image size */
             border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .project-info {
-            flex: 1; /* Take the remaining space */
-            padding-top: 20px;
+            flex: 1;
+            padding-top: 10px;
         }
 
         .project h2 {
@@ -111,7 +113,7 @@
         }
 
         .project button:hover {
-            background-color: #8DD5E7;
+            background-color: #70b8cf;
         }
 
         .read-more {
@@ -119,9 +121,12 @@
             margin-top: 20px;
         }
 
-        .project button.read-less {
-            display: none;
-            background-color: #ff4b4b;
+        .project button.view-code {
+            background-color: #4CAF50;
+        }
+
+        .project button.view-code:hover {
+            background-color: #45a049;
         }
 
         footer {
@@ -144,16 +149,13 @@
     <script>
         function toggleReadMore(button, projectId) {
             var readMoreSection = document.getElementById('read-more-' + projectId);
-            var readLessButton = document.getElementById('read-less-' + projectId);
             
             if (readMoreSection.style.display === 'block') {
                 readMoreSection.style.display = 'none';
-                readLessButton.style.display = 'none';
-                button.style.display = 'block';
+                button.innerHTML = 'Read More'; // Change button to "Read More"
             } else {
                 readMoreSection.style.display = 'block';
-                button.style.display = 'none';
-                readLessButton.style.display = 'block';
+                button.innerHTML = 'Read Less'; // Change button to "Read Less"
             }
         }
     </script>
@@ -185,7 +187,7 @@
                     <h2>Dora the Explora: Autonomous Vehicle Project</h2>
                     <p class="project-summary">An autonomous RC car using LIDAR-based sensing for navigation. Senior Design Project with a final grade of 96%.</p>
                     <button onclick="toggleReadMore(this, 1)">Read More</button>
-                    <button id="read-less-1" class="read-less" onclick="toggleReadMore(this, 1)">Read Less</button>
+                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
                     <div class="read-more" id="read-more-1">
                         <p><strong>Technical Stack:</strong></p>
                         <ul>
@@ -208,7 +210,7 @@
                     <h2>SwivelFind: Embedded Systems Final Project</h2>
                     <p class="project-summary">A 360-degree swiveling rangefinder capable of detecting objects using an Ultrasonic Sensor. Honorary Mention for Exceptional Project.</p>
                     <button onclick="toggleReadMore(this, 2)">Read More</button>
-                    <button id="read-less-2" class="read-less" onclick="toggleReadMore(this, 2)">Read Less</button>
+                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/SwivelFind';">View Code</button>
                     <div class="read-more" id="read-more-2">
                         <p><strong>Technical Stack:</strong></p>
                         <ul>
@@ -230,7 +232,7 @@
                     <h2>CEC’s Café App: Full Stack Development</h2>
                     <p class="project-summary">A full-stack web application for managing online café orders, with a fully functional UI and integrated backend server.</p>
                     <button onclick="toggleReadMore(this, 3)">Read More</button>
-                    <button id="read-less-3" class="read-less" onclick="toggleReadMore(this, 3)">Read Less</button>
+                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/CECs-Cafe-App';">View Code</button>
                     <div class="read-more" id="read-more-3">
                         <p><strong>Technical Stack:</strong></p>
                         <ul>
@@ -253,7 +255,7 @@
                     <h2>Zip/Unzip: Data Structures Project</h2>
                     <p class="project-summary">Data compression and decompression system using Huffman Tree data structures in C/C++.</p>
                     <button onclick="toggleReadMore(this, 4)">Read More</button>
-                    <button id="read-less-4" class="read-less" onclick="toggleReadMore(this, 4)">Read Less</button>
+                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Zip%20Unzip';">View Code</button>
                     <div class="read-more" id="read-more-4">
                         <p><strong>Technical Stack:</strong></p>
                         <ul>
