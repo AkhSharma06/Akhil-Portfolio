@@ -164,29 +164,15 @@
             <div class="project-content">
                 <div class="project-image">
                     <img src="images/dora_final_pic.jpg" alt="Dora Final Pic">
+                    <div class="project-buttons">
+                        <button onclick="toggleReadMore(this, 1)">Read More</button>
+                        <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
+                    </div>
                 </div>
                 <div class="project-text">
                     <h2>Dora the Explora: Autonomous Vehicle Project</h2>
-                    <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
+                    <p class="project-summary">This project involved the development of an autonomous RC car...</p>
                 </div>
-            </div>
-            <div class="project-buttons">
-                <button onclick="toggleReadMore(this, 1)">Read More</button>
-                <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
-            </div>
-            <div class="read-more" id="read-more-1">
-                <p><strong>Technical Stack:</strong></p>
-                <ul>
-                    <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
-                    <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
-                    <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
-                </ul>
-                <p><strong>Code Breakdown:</strong></p>
-                <ul>
-                    <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
-                    <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
-                    <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
-                </ul>
             </div>
         </div>
 
