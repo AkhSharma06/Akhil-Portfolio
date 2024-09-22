@@ -112,23 +112,27 @@
 
         .project-buttons {
             display: flex;
-            justify-content: space-between; /* Ensure buttons span the width of the image */
-            width: 100%; /* Match the width of the parent container */
+            justify-content: space-between; /* Distribute the buttons evenly */
+            width: 100%; /* Ensure it aligns with the image */
+            margin-top: 10px; /* Add some space above the buttons */
+        }
+
+        .project-image {
+            flex: 0 0 25%; /* Control the image width */
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align buttons with the image */
         }
 
         .project button {
-            background-color: #A6C8EE;
+            background-color: #8DD5E7;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            flex: 1; /* Allow buttons to grow evenly */
-            margin-right: 10px; /* Space between the buttons */
-        }
-
-        .project button:last-child {
-            margin-right: 0; /* Remove margin from the last button */
+            flex: 1;
         }
 
         .project button:hover {
