@@ -77,18 +77,42 @@
         }
 
         .project-image {
-            flex: 0 0 25%; /* Control the image width */
+            flex: 0 0 25%;
             margin-right: 20px;
-            display: flex;
-            flex-direction: column; /* Stack buttons below the image */
-            align-items: flex-start; /* Align buttons with the image */
+        }
+
+        .project-image img {
+            width: 100%;
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 8px;
+            object-fit: cover; /* Ensure the image fills the space while maintaining aspect ratio */
+        }
+
+        .project-text {
+            flex-grow: 1;
+        }
+
+        .project h2 {
+            font-size: 30px;
+            margin-top: 0;
+        }
+
+        /* Position read more section below the image and content */
+        .read-more {
+            display: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .project-summary {
+            margin: 10px 0;
+            font-size: 22px;
         }
 
         .project-buttons {
             display: flex;
-            justify-content: space-between; /* Distribute the buttons evenly */
-            width: 100%; /* Ensure the buttons match the width of the image */
-            margin-top: 10px; /* Add some space above the buttons */
+            gap: 10px; /* Add some space between the buttons */
         }
 
         .project button {
@@ -98,11 +122,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            flex: 1;
-        }
-
-        .project button:last-child {
-            margin-right: 0;
         }
 
         .project button:hover {
@@ -164,15 +183,29 @@
             <div class="project-content">
                 <div class="project-image">
                     <img src="images/dora_final_pic.jpg" alt="Dora Final Pic">
-                    <div class="project-buttons">
-                        <button onclick="toggleReadMore(this, 1)">Read More</button>
-                        <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
-                    </div>
                 </div>
                 <div class="project-text">
                     <h2>Dora the Explora: Autonomous Vehicle Project</h2>
-                    <p class="project-summary">This project involved the development of an autonomous RC car...</p>
+                    <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
                 </div>
+            </div>
+            <div class="project-buttons">
+                <button onclick="toggleReadMore(this, 1)">Read More</button>
+                <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
+            </div>
+            <div class="read-more" id="read-more-1">
+                <p><strong>Technical Stack:</strong></p>
+                <ul>
+                    <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
+                    <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
+                    <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
+                </ul>
+                <p><strong>Code Breakdown:</strong></p>
+                <ul>
+                    <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
+                    <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
+                    <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
+                </ul>
             </div>
         </div>
 
