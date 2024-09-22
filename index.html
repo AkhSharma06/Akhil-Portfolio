@@ -29,7 +29,7 @@
             flex-direction: column;
             align-items: center;
             padding-top: 180px;
-            margin-left: -60px;
+            margin-left: -80px;
         }
 
         .sidebar img {
@@ -83,6 +83,15 @@
             position: relative;
         }
 
+        .project-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            margin-bottom: 20px; /* Add spacing between content and read more section */
+        }
+
         .project-image {
             flex: 0 0 25%;
             margin-right: 20px;
@@ -90,14 +99,24 @@
 
         .project-image img {
             width: 100%;
-            max-width: 300px; /* Restrict the image size to 300x300 */
+            max-width: 300px;
             max-height: 300px;
             border-radius: 8px;
             object-fit: cover; /* Ensure the image fills the space while maintaining aspect ratio */
         }
 
+        .project-text {
+            flex-grow: 1;
+        }
+
         .project h2 {
             margin-top: 0;
+        }
+
+        /* Position read more section below the image and content */
+        .read-more {
+            text-align: right;
+            margin-top: 20px;
         }
 
         .project-summary {
@@ -116,11 +135,6 @@
 
         .project button:hover {
             background-color: #70b8cf;
-        }
-
-        .read-more {
-            display: none;
-            margin-top: 20px;
         }
 
         .project button.view-code {
@@ -182,99 +196,107 @@
         <div class="container">
             <!-- Project 1 -->
             <div class="project">
-                <div class="project-image">
-                    <img src="images/dora_final_pic.jpg" alt="Dora Final Pic">
-                </div>
-                <div class="project-info">
-                    <h2>Dora the Explora: Autonomous Vehicle Project</h2>
-                    <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
-                    <button onclick="toggleReadMore(this, 1)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
-                    <div class="read-more" id="read-more-1">
-                        <p><strong>Technical Stack:</strong></p>
-                        <ul>
-                            <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
-                            <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
-                            <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
-                        </ul>
-                        <p><strong>Code Breakdown:</strong></p>
-                        <ul>
-                            <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
-                            <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
-                            <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
-                        </ul>
+                <div class="project-content">
+                    <div class="project-image">
+                        <img src="images/dora_final_pic.jpg" alt="Dora Final Pic">
                     </div>
+                    <div class="project-text">
+                        <h2>Dora the Explora: Autonomous Vehicle Project</h2>
+                        <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
+                    </div>
+                </div>
+                <button onclick="toggleReadMore(this, 1)">Read More</button>
+                <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
+                <div class="read-more" id="read-more-1">
+                    <p><strong>Technical Stack:</strong></p>
+                    <ul>
+                        <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
+                        <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
+                        <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
+                    </ul>
+                    <p><strong>Code Breakdown:</strong></p>
+                    <ul>
+                        <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
+                        <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
+                        <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
+                    </ul>
                 </div>
             </div>
 
             <!-- Project 2 -->
             <div class="project">
-                <div class="project-image">
-                    <img src="https://via.placeholder.com/300" alt="SwivelFind Project">
-                </div>
-                <div class="project-info">
-                    <h2>SwivelFind: Embedded Systems Final Project</h2>
-                    <p class="project-summary"> A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote. Completed in a group of 2 with Corbin Warmbier. Received Honorary Mention for Exceptional Project </p>
-                    <button onclick="toggleReadMore(this, 2)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/SwivelFind';">View Code</button>
-                    <div class="read-more" id="read-more-2">
-                        <p><strong>Technical Stack:</strong></p>
-                        <ul>
-                            <li>Hardware: Ultrasonic Sensor (UART), OLED Display (SPI), Stepper Motor (PWM)</li>
-                            <li>Software: Embedded C, AWS IoT (for cloud communication)</li>
-                        </ul>
-                        <p><strong>Code Breakdown:</strong></p>
-                        <ul>
-                            <li>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</li>
-                            <li>Motor Control: A stepper motor is driven using Pulse Width Modulation (PWM) for precise rotation control.</li>
-                            <li>Remote Communication: The IR remote control is programmed to start and stop scanning. AWS IoT is used for remote data logging.</li>
-                        </ul>
+                <div class="project-content">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/300" alt="SwivelFind Project">
                     </div>
+                    <div class="project-text">
+                        <h2>SwivelFind: Embedded Systems Final Project</h2>
+                        <p class="project-summary"> A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote. Completed in a group of 2 with Corbin Warmbier. Received Honorary Mention for Exceptional Project </p>
+                    </div>
+                </div>
+                <button onclick="toggleReadMore(this, 2)">Read More</button>
+                <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/SwivelFind';">View Code</button>
+                <div class="read-more" id="read-more-2">
+                    <p><strong>Technical Stack:</strong></p>
+                    <ul>
+                        <li>Hardware: Ultrasonic Sensor (UART), OLED Display (SPI), Stepper Motor (PWM)</li>
+                        <li>Software: Embedded C, AWS IoT (for cloud communication)</li>
+                    </ul>
+                    <p><strong>Code Breakdown:</strong></p>
+                    <ul>
+                        <li>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</li>
+                        <li>Motor Control: A stepper motor is driven using Pulse Width Modulation (PWM) for precise rotation control.</li>
+                        <li>Remote Communication: The IR remote control is programmed to start and stop scanning. AWS IoT is used for remote data logging.</li>
+                    </ul>
                 </div>
             </div>
 
             <!-- Project 3 -->
             <div class="project">
-                <div class="project-image">
-                    <img src="https://via.placeholder.com/300" alt="CEC's Café App Project">
-                </div>
-                <div class="project-info">
-                    <h2>CEC’s Café App: Full Stack Development</h2>
-                    <p class="project-summary">A full-stack web application for managing online café orders, with a fully functional UI and integrated backend server.</p>
-                    <button onclick="toggleReadMore(this, 3)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/CECs-Cafe-App';">View Code</button>
-                    <div class="read-more" id="read-more-3">
-                        <p><strong>Technical Stack:</strong></p>
-                        <ul>
-                            <li>Frontend: HTML, CSS, JavaScript, Figma (for UI/UX design)</li>
-                            <li>Backend: Node.js, Express</li>
-                            <li>Database: MongoDB</li>
-                        </ul>
-                        <p><strong>Code Breakdown:</strong></p>
-                        <p>Frontend: The UI is designed using Figma and built using HTML and CSS. JavaScript handles form validation and async data fetching.</p>
+                <div class="project-content">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/300" alt="CEC's Café App Project">
                     </div>
+                    <div class="project-text">
+                        <h2>CEC’s Café App: Full Stack Development</h2>
+                        <p class="project-summary">A full-stack web application for managing online café orders, with a fully functional UI and integrated backend server.</p>
+                    </div>
+                </div>
+                <button onclick="toggleReadMore(this, 3)">Read More</button>
+                <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/CECs-Cafe-App';">View Code</button>
+                <div class="read-more" id="read-more-3">
+                    <p><strong>Technical Stack:</strong></p>
+                    <ul>
+                        <li>Frontend: HTML, CSS, JavaScript, Figma (for UI/UX design)</li>
+                        <li>Backend: Node.js, Express</li>
+                        <li>Database: MongoDB</li>
+                    </ul>
+                    <p><strong>Code Breakdown:</strong></p>
+                    <p>Frontend: The UI is designed using Figma and built using HTML and CSS. JavaScript handles form validation and async data fetching.</p>
                 </div>
             </div>
 
             <!-- Project 4 -->
             <div class="project">
-                <div class="project-image">
-                    <img src="https://via.placeholder.com/300" alt="Zip/Unzip Project">
-                </div>
-                <div class="project-info">
-                    <h2>Zip/Unzip: Data Structures Project</h2>
-                    <p class="project-summary">Data compression and decompression system using Huffman Tree data structures in C/C++.</p>
-                    <button onclick="toggleReadMore(this, 4)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Zip%20Unzip';">View Code</button>
-                    <div class="read-more" id="read-more-4">
-                        <p><strong>Technical Stack:</strong></p>
-                        <ul>
-                            <li>Language: C/C++</li>
-                            <li>Data Structures: Huffman Tree (custom implementation)</li>
-                        </ul>
-                        <p><strong>Code Breakdown:</strong></p>
-                        <p>Compression Algorithm: The algorithm constructs the Huffman Tree using a priority queue, encoding data by mapping each unique value to a tree node.</p>
+                <div class="project-content">
+                    <div class="project-image">
+                        <img src="https://via.placeholder.com/300" alt="Zip/Unzip Project">
                     </div>
+                    <div class="project-text">
+                        <h2>Zip/Unzip: Data Structures Project</h2>
+                        <p class="project-summary">Data compression and decompression system using Huffman Tree data structures in C/C++.</p>
+                    </div>
+                </div>
+                <button onclick="toggleReadMore(this, 4)">Read More</button>
+                <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Zip%20Unzip';">View Code</button>
+                <div class="read-more" id="read-more-4">
+                    <p><strong>Technical Stack:</strong></p>
+                    <ul>
+                        <li>Language: C/C++</li>
+                        <li>Data Structures: Huffman Tree (custom implementation)</li>
+                    </ul>
+                    <p><strong>Code Breakdown:</strong></p>
+                    <p>Compression Algorithm: The algorithm constructs the Huffman Tree using a priority queue, encoding data by mapping each unique value to a tree node.</p>
                 </div>
             </div>
         </div>
