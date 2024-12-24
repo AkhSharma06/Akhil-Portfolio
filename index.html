@@ -27,6 +27,17 @@
             align-items: center;
             font-family: 'Arial', sans-serif;
             gap: 20px;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+            height: 100vh; /* Full viewport height */
+            display: flex; /* Flexbox for alignment */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            position: relative; /* Positioned at the top */
+            width: 100%; /* Full width */
+            z-index: 1; /* Ensure it’s on top of other content */
+            font-family: 'Arial', sans-serif; /* Replace with your chosen font */
+            gap: 20px; /* Space between the image and text */
         }
 
         .intro-image {
@@ -73,6 +84,20 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+        .intro-text {
+            text-align: center; /* Center the text horizontally */
+        }
+
+        .intro-text h1 {
+            font-size: 3rem; /* Main heading size */
+            margin: 0; /* Remove default margin */
+        }
+
+        .intro-text h2 {
+            font-size: 1.5rem; /* Subheading size */
+            margin: 10px 0 0; /* Add a little space above */
+            font-weight: 300; /* Optional: lighter weight for subheading */
         }
 
 
@@ -267,12 +292,12 @@
 
 <div class="intro">
     <img src="Images/grad_photo.jpg" alt="Your Photo" class="intro-image">
-    <h1>Hi, I am Akhil Sharma</h1>
-    <h2>and welcome to my Project Portfolio</h2>
-    <div class="scroll-indicator">
-        <span>▼</span>
+    <div class="intro-text">
+        <h1>Hi, I am Akhil Sharma</h1>
+        <h2>and welcome to my Project Portfolio</h2>
     </div>
 </div>
+    
     
     
 <div class="wrapper">
