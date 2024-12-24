@@ -171,12 +171,15 @@
         }
 
         .about-me img {
-            width: 350px; /* Make the image larger */
-            height: 350px; /* Square shape */
-            border-radius: 8px; /* Slight rounding for aesthetics */
-            object-fit: cover; /* Ensures the image doesn’t distort */
+            width: 100%; /* Make it fill the container */
+            max-width: 350px; /* Set a maximum width */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 8px; /* Retain slight rounding for aesthetics */
+            object-fit: cover; /* Ensure the image covers its container */
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Add a shadow for better contrast */
+            margin: 0; /* Remove any default margins */
         }
+
 
         .about-me-text {
             flex-grow: 1;
@@ -342,13 +345,17 @@
         </div>
     </div>
 
-    <!-- About Me Section -->
     <div class="about-me" id="about-me">
         <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
         <div class="about-me-text">
-            <p>Hello! My name is Akhil Sharma. I am a passionate Computer Engineer with a love for solving problems and building innovative projects. Through my portfolio, I aim to showcase my expertise in embedded systems, full-stack development, and autonomous vehicles. I thrive on challenges that push me to learn and grow, and I look forward to sharing my journey with you!</p>
+            <p>
+                Hello! My name is Akhil Sharma. I am a passionate Computer Engineer with a love for solving problems and building innovative projects.
+                Through my portfolio, I aim to showcase my expertise in embedded systems, full-stack development, and autonomous vehicles.
+                I thrive on challenges that push me to learn and grow, and I look forward to sharing my journey with you!
+            </p>
         </div>
     </div>
+    
 
 
     <!-- Projects Section -->
