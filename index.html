@@ -59,20 +59,38 @@
             width: 100%;
         }
 
+        /* @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px); /* Start slightly below *//*
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* End at the original position *//*
+            }
+        } */
+
+
         .project {
             background-color: #B5D6ED;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 10px 10px 10px -8px rgba(0, 0, 0, 0.8); /* Black shadow to right and bottom */
+            box-shadow: 10px 10px 10px -8px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             position: relative;
-            width: 100%;
-            margin-bottom: 20px; /* Add some space between project boxes */
-            max-width: 1200px; /* Match the width of .wrapper */
+            max-width: 1200px;
             margin: 0 auto 20px auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transform and shadow change */
+            /* animation: fadeIn 0.8s ease forwards; Trigger fade-in animation */
         }
+
+        .project:hover {
+            transform: translateY(-10px); /* Lift up slightly */
+            box-shadow: 10px 15px 15px -8px rgba(0, 0, 0, 0.6); /* Enhance shadow on hover */
+        }
+
 
         .project-content {
             display: flex;
@@ -131,17 +149,22 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            flex: 1;
-            margin-right: 10px; /* Space between the buttons */
+            transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transform and color change */
         }
+
+        .project button:hover {
+            transform: scale(1.1); /* Slightly enlarge button */
+            background-color: #00509E; /* Change color on hover */
+        }
+
 
         .project button:last-child {
             margin-right: 0;
         }
 
-        .project button:hover {
+        /* .project button:hover {
             background-color: #002855;
-        }
+        } */
 
         .project button.view-code {
             background-color: #4CAF50;
