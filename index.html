@@ -171,14 +171,16 @@
         }
 
         .about-me img {
-            width: 250px; /* Set the desired width */
-            height: 250px; /* Set the desired height for a square image */
-            border-radius: 2px; /* Adjust the roundness if needed */
+            width: 350px; /* Set the desired width */
+            height: 350px; /* Set the desired height for a square image */
+            border-radius: 0; /* Remove rounding if not needed */
             border: 5px solid #fff; /* White border */
-            object-fit: cover; /* Ensure the image fills the space */
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Add shadow for contrast */
-            margin: 0; /* Remove any default margin */
+            object-fit: cover; /* Ensures the image scales properly */
+            display: block; /* Removes any inline spacing issues */
+            margin: 0; /* Removes any default margin */
+            box-sizing: border-box; /* Ensures the border is included in the dimensions */
         }
+
 
         .about-me-text {
             flex-grow: 1;
