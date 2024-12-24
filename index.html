@@ -23,6 +23,36 @@
             margin: 0 auto; /* Center align the content */
         }
 
+                /* Intro Section Styling */
+        .intro {
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: sticky; /* Stick to the top */
+            top: 0;
+            width: 100%; /* Full width */
+            z-index: 1; /* Ensure it’s on top of other content */
+            font-family: 'Arial', sans-serif; /* Replace with your chosen font */
+        }
+
+        .intro h1 {
+            font-size: 5rem; /* Adjust to fit your desired style */
+            margin: 0;
+            text-transform: uppercase; /* Optional: Makes the name uppercase */
+            letter-spacing: 2px; /* Optional: Adds spacing between letters */
+        }
+
+        /* Main Wrapper */
+        .wrapper {
+            margin-top: 0; /* Start right after the intro section */
+            z-index: 0;
+            background-color: #B3A369; /* Existing background color */
+        }
+
+
 
         header {
             background-color: #002855;
@@ -212,6 +242,11 @@
 </head>
 <body>
 
+
+<div class="intro">
+    <h1>Akhil Sharma</h1>
+</div>
+    
 <div class="wrapper">
     <!-- Header with photo and title -->
     <header>
