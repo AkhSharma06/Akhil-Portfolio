@@ -13,38 +13,67 @@
             color: #333;
         }
 
-        /* Intro Section Styling */
+        html {
+            scroll-behavior: smooth; /* Enables smooth scrolling */
+        }
+
         .intro {
-            background-color: #000; /* Black background */
-            color: #fff; /* White text */
-            height: 100vh; /* Full viewport height */
-            display: flex; /* Flexbox for alignment */
-            justify-content: center; /* Center the content horizontally */
-            align-items: center; /* Center the content vertically */
-            position: relative; /* Positioned at the top of the content */
-            width: 100%; /* Full width */
-            z-index: 1; /* Ensure it’s on top of other content */
-            font-family: 'Arial', sans-serif; /* Replace with your chosen font */
-            gap: 20px; /* Add spacing between image and text */
+            position: relative;
+            background: linear-gradient(to bottom, #000 85%, rgba(0, 0, 0, 0)); /* Fades to transparent */
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            gap: 20px;
         }
 
-        /* Profile Image in Intro */
         .intro-image {
-            width: 550x; /* Adjust the size of the image */
-            height: 550px; /* Make it a square */
-            border-radius: 50%; /* Make it circular */
-            border: 2px solid #fff; /* Optional: Add a white border */
-            object-fit: cover; /* Ensure the image fits well */
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
         }
 
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+            color: #fff;
+            font-size: 2rem;
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
 
         .wrapper {
-            margin-top: 0; /* Start immediately after the intro section */
-            z-index: 0; /* Lower priority compared to .intro */
-            background-color: #B3A369;
+            margin-top: 0;
+            opacity: 0; /* Start hidden */
+            transform: translateY(50px); /* Start slightly below */
+            animation: slideUp 1s ease-out forwards;
+            animation-delay: 0.5s;
         }
 
-
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
 
         header {
