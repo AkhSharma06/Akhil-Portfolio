@@ -171,15 +171,12 @@
         }
 
         .about-me img {
-            width: 100%; /* Make it fill the container */
-            max-width: 350px; /* Set a maximum width */
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 8px; /* Retain slight rounding for aesthetics */
-            object-fit: cover; /* Ensure the image covers its container */
+            width: 350px; /* Make the image larger */
+            height: 350px; /* Square shape */
+            border-radius: 8px; /* Slight rounding for aesthetics */
+            object-fit: cover; /* Ensures the image doesn’t distort */
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); /* Add a shadow for better contrast */
-            margin: 0; /* Remove any default margins */
         }
-
 
         .about-me-text {
             flex-grow: 1;
@@ -221,6 +218,7 @@
 
         .project-image img {
             width: 100%;
+            height: 100%;
             max-width: 300px;
             max-height: 300px;
             border-radius: 8px;
@@ -345,6 +343,7 @@
         </div>
     </div>
 
+    <!-- About Me Section -->
     <div class="about-me" id="about-me">
         <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
         <div class="about-me-text">
