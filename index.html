@@ -11,19 +11,8 @@
             padding: 0;
             background-color: #B3A369;
             color: #333;
-            display: flex;
-            justify-content: center;
         }
 
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            max-width: 1200px; /* Adjust width to align all content consistently */
-            width: 100%;
-            margin: 0 auto; /* Center align the content */
-        }
-
-                /* Intro Section Styling */
         .intro {
             background-color: #000; /* Black background */
             color: #fff; /* White text */
@@ -31,26 +20,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: sticky; /* Stick to the top */
-            top: 0;
+            position: relative; /* Positioned at the top of the content */
             width: 100%; /* Full width */
             z-index: 1; /* Ensure it’s on top of other content */
             font-family: 'Arial', sans-serif; /* Replace with your chosen font */
         }
 
-        .intro h1 {
-            font-size: 5rem; /* Adjust to fit your desired style */
-            margin: 0;
-            text-transform: uppercase; /* Optional: Makes the name uppercase */
-            letter-spacing: 2px; /* Optional: Adds spacing between letters */
+        .wrapper {
+            margin-top: 0; /* Start immediately after the intro section */
+            z-index: 0; /* Lower priority compared to .intro */
+            background-color: #B3A369;
         }
 
-        /* Main Wrapper */
-        .wrapper {
-            margin-top: 0; /* Start right after the intro section */
-            z-index: 0;
-            background-color: #B3A369; /* Existing background color */
-        }
 
 
 
