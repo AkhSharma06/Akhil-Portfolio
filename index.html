@@ -5,6 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akhil Sharma's Project Portfolio</title>
     <style>
+
+        /* Navigation Bar Styling */
+        .navbar {
+            position: fixed; /* Sticks to the top of the page */
+            top: 0;
+            width: 100%; /* Full width */
+            background-color: #002855; /* Dark blue background */
+            color: white;
+            display: flex;
+            justify-content: center;
+            gap: 30px; /* Space between links */
+            padding: 10px 0; /* Vertical padding */
+            z-index: 1000; /* Ensure it stays on top */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow */
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none; /* Remove underline */
+            font-size: 1.2rem; /* Increase font size */
+            transition: color 0.3s ease; /* Smooth hover effect */
+        }
+
+        .navbar a:hover {
+            color: #8DD5E7; /* Light blue on hover */
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -19,7 +46,7 @@
 
         .intro {
             position: relative;
-            background: linear-gradient(to bottom, #002855 85%, rgba(0, 0, 0, 0)); /* Fades to transparent */
+            background: linear-gradient(to bottom, #000 85%, rgba(0, 0, 0, 0));
             color: #fff;
             height: 100vh;
             display: flex;
@@ -38,6 +65,7 @@
             z-index: 1; /* Ensure it’s on top of other content */
             font-family: 'Arial', sans-serif; /* Replace with your chosen font */
             gap: 20px; /* Space between the image and text */
+            padding-top: 60px; /* Offset for the fixed navbar height */
         }
 
         .intro-image {
@@ -48,31 +76,13 @@
             object-fit: cover;
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            width: 100%;
-            color: #fff;
-            font-size: 2rem;
-            animation: bounce 1.5s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
         .wrapper {
             margin-top: 0;
             opacity: 0; /* Start hidden */
             transform: translateY(50px); /* Start slightly below */
             animation: slideUp 1s ease-out forwards;
             animation-delay: 0.5s;
+            padding-top: 60px; /* Offset for the fixed navbar height */
         }
 
         @keyframes slideUp {
@@ -262,6 +272,7 @@
             width: 100%;
             max-width: 1200px; /* Match the width of .wrapper */
             margin: 0 auto 20px auto;
+            padding-top: 60px; /* Offset for the fixed navbar height */
         }
 
         footer a {
@@ -289,14 +300,42 @@
 </head>
 <body>
 
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="#about-me">About Me</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact-me">Contact Me</a>
+    </nav>
 
-<div class="intro">
-    <img src="Images/grad_photo.jpg" alt="Your Photo" class="intro-image">
-    <div class="intro-text">
-        <h1>Hi, I am Akhil Sharma</h1>
-        <h2>A Computer Engineer and welcome to my Project Portfolio</h2>
+    <!-- Intro Section -->
+    <div class="intro" id="about-me">
+        <img src="Images/grad_photo.jpg" alt="Your Photo" class="intro-image">
+        <div class="intro-text">
+            <h1>Hi, I am Akhil Sharma</h1>
+            <h2>A Computer Engineer and welcome to my Project Portfolio</h2>
+        </div>
     </div>
-</div>
+
+    <!-- Projects Section -->
+    <div class="wrapper" id="projects">
+        <header>
+            <img src="Images/grad_photo.jpg" alt="Your Photo">
+            <h1>Akhil Sharma's Project Portfolio</h1>
+        </header>
+        <div class="container">
+            <!-- Add your project content here -->
+        </div>
+    </div>
+
+    <!-- Contact Me Section -->
+    <footer id="contact-me">
+        <p>Connect with me on <a href="https://www.linkedin.com/in/akhsharma/">LinkedIn</a> | School Email: 
+        <a href="mailto:akhsharma@ucdavis.edu">akhsharma@ucdavis.edu</a> | Email: 
+        <a href="mailto:theakkuking@gmail.com">theakkuking@gmail.com</a></p>
+    </footer>
+</body>
+
     
     
     
