@@ -142,20 +142,16 @@
             gap: 30px; /* Increase spacing for larger image */
         }
 
-        /* About Me Section */
-        .about-me {
-            display: flex;
-            align-items: center; /* Vertically centers the content */
-            justify-content: center; /* Horizontally centers the content */
-            flex-direction: row; /* Ensures the image and text are side by side */
-            padding: 50px 20px;
-            background-color: #111;
-            color: white;
-            gap: 30px; /* Space between the image and text */
-            text-align: center; /* Ensures text is centered if it wraps */
-            height: 100vh; /* Full viewport height for centering */
+        .about-me img {
+            width: 350px; /* Set the desired width */
+            height: 350px; /* Set the desired height */
+            object-fit: cover; /* Ensures the image scales properly */
+            display: block; /* Prevents inline spacing issues */
+            margin: 0; /* Removes extra margins */
+            border-radius: 15px; /* Slight rounding for edges */
+            border: 5px solid #fff; /* White border around the image */
+            box-sizing: border-box; /* Includes the border in the dimensions */
         }
-
 
         .about-me-text {
             flex-grow: 1;
