@@ -277,9 +277,13 @@
 
         /* Apply the fade-in animation */
         .fade-in-text {
-            opacity: 0; /* Start invisible */
-            animation: fadeIn 2s ease-in-out forwards; /* Trigger fade-in animation */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 2s ease-in-out forwards;
+            animation-delay: 2s; /* Wait 2 seconds before starting the animation */
         }
+
+
 
 
 
