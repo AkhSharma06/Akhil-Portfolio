@@ -263,29 +263,24 @@
             background-color: #45a049;
         }
 
+        /* Keyframe for fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0; /* Initially invisible */
+                transform: translateY(20px); /* Start slightly below */
+            }
+            to {
+                opacity: 1; /* Fully visible */
+                transform: translateY(0); /* Reset position */
+            }
+        }
+
+        /* Apply the fade-in animation */
         .fade-in-text {
-            opacity: 0; /* Initially invisible */
-            transform: translateY(20px); /* Start slightly below */
-            transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Smooth animation */
-            will-change: opacity, transform; /* Optimized for performance */
+            opacity: 0; /* Start invisible */
+            animation: fadeIn 2s ease-in-out forwards; /* Trigger fade-in animation */
         }
 
-        .fade-in-text.visible {
-            opacity: 1; /* Fully visible */
-            transform: translateY(0); /* Reset position */
-        }
-
-        .fade-in-text {
-            opacity: 0; /* Initially invisible */
-            transform: translateY(20px); /* Start slightly below */
-            transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Smooth animation */
-            will-change: opacity, transform; /* Optimized for performance */
-        }
-
-        .fade-in-text.visible {
-            opacity: 1; /* Fully visible */
-            transform: translateY(0); /* Reset position */
-        }
 
         footer {
             text-align: center;
@@ -494,24 +489,12 @@
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            console.log("JavaScript Loaded");
             const fadeInElements = document.querySelectorAll(".fade-in-text");
-
-            function handleScroll() {
-                fadeInElements.forEach((el) => {
-                    const rect = el.getBoundingClientRect();
-                    const inView = rect.top <= window.innerHeight && rect.bottom >= 0;
-
-                    if (inView) {
-                        el.classList.add("visible");
-                    }
-                });
-            }
-
-            window.addEventListener("scroll", handleScroll);
-            handleScroll(); // Initial check on load
+            
+            fadeInElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.5}s`; // Delay based on index
+            });
         });
-
     </script>
 </body>
 </html>
