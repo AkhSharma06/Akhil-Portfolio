@@ -6,6 +6,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <title>Akhil Sharma's Project Portfolio</title>
     <style>
+        .hidden {
+            opacity: 0;
+            transform: translateY(50px); /* Slight downward offset */
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: translateY(0); /* Reset to original position */
+        }
+
         /* Keyframe for fade-in effect */
         @keyframes fadeIn {
             from {
@@ -285,6 +296,7 @@
             color: white;
         }
 
+
         footer {
             text-align: center;
             padding: 20px;
@@ -362,6 +374,14 @@
             <h2>A Computer Engineer and welcome to my Project Portfolio</h2>
         </div>
     </div>
+
+    <div class="about-me hidden" id="about-me">
+        <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
+        <div class="about-me-text">
+            <p>I am a passionate Computer Engineer...</p>
+        </div>
+    </div>
+    
 
     <!-- About Me Section -->
     <div class="about-me" id="about-me">
