@@ -6,17 +6,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <title>Akhil Sharma's Project Portfolio</title>
     <style>
-        .hidden {
-            opacity: 0; /* Start invisible */
-            transform: translateX(-20px); /* Slightly offset */
-            /* transition: opacity 0.5s ease, transform 0.5s ease; Smooth transition */
-        }
-
-        .visible {
-            opacity: 1; /* Fully visible */
-            transform: translateX(0); /* Reset position */
-            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
-        }
 
 
         /* Keyframe for fade-in effect */
@@ -383,7 +372,7 @@
     
 
     <!-- About Me Section -->
-    <div class="about-me" id="about-me">
+    <div class="about-me hidden" id="about-me">
         <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
         <div class="about-me-text">
             <p>
