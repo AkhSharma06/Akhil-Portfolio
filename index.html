@@ -10,11 +10,13 @@
         @keyframes fadeIn {
             from {
                 opacity: 0; /* Initially invisible */
-                transform: translateX(-20px);
+                /* transform: translateX(-20px); Start slightly below */
+                scale: 0.5;
             }
             to {
                 opacity: 1; /* Fully visible */
-                transform: translateX(0);
+                /* transform: translateX(0); Reset position */
+                scale: 1;
             }
         }
 
@@ -162,6 +164,7 @@
             /* border-radius: 15px; Slight rounding for edges */
             /* border: 5px solid #fff; White border around the image */
             /* box-sizing: border-box; Includes the border in the dimensions */
+            animation: fadeIn 2s ease-in-out forwards;
             animation-timeline: view();
         }
 
@@ -189,6 +192,8 @@
             width: 100%; /* Full width of the container */
             margin: 0 auto 20px auto; /* Center align */
             color: #fff;
+            animation: fadeIn 2s ease-in-out forwards;
+            animation-timeline: view();
         }
 
 
