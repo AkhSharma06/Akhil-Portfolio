@@ -17,7 +17,7 @@
                 transform: translateX(0); /* Reset position */
             }
         }
-        
+
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -169,6 +169,10 @@
             max-width: 1000px;
             font-size: 1.2rem;
             line-height: 1.8;
+            opacity: 0; /* Initially invisible */
+            transform: translateX(-20px); /* Slightly offset for effect */
+            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
+            animation-delay: 1s; /* Optional delay before animation starts */
         }
 
         .project {
@@ -211,6 +215,10 @@
         .project-text {
             flex-grow: 1;
             color: #fff;
+            opacity: 0; /* Initially invisible */
+            transform: translateX(-20px); /* Slightly offset for effect */
+            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
+            animation-delay: 1s; /* Optional delay before animation starts */
         }
 
         .project h2 {
