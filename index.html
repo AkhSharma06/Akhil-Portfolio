@@ -6,8 +6,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <title>Akhil Sharma's Project Portfolio</title>
     <style>
-
-
         /* Keyframe for fade-in effect */
         @keyframes fadeIn {
             from {
@@ -111,7 +109,10 @@
 
         .intro-text {
             text-align: center; /* Center the text horizontally */
-            /* opacity: 0; Initially invisible */
+            opacity: 0; /* Initially invisible */
+            transform: translateX(-20px); /* Slightly offset for effect */
+            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
+            animation-delay: 1s; /* Optional delay before animation starts */
         }
 
         .intro-text h1 {
@@ -318,28 +319,6 @@
                 button.innerHTML = 'Read Less'; // Change button to "Read Less"
             }
         }
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const hiddenElements = document.querySelectorAll(".hidden");
-    
-            const checkVisibility = () => {
-                hiddenElements.forEach((el) => {
-                    const rect = el.getBoundingClientRect();
-                    const windowHeight = window.innerHeight;
-    
-                    // Check if the element is within the viewport
-                    if (rect.top <= windowHeight && rect.bottom >= 0) {
-                        el.classList.add("visible");
-                        el.classList.remove("hidden");
-                    }
-                });
-            };
-    
-            // Run on page load and scroll events
-            window.addEventListener("scroll", checkVisibility);
-            checkVisibility(); // Initial check
-        });
     </script>
     
 </head>
