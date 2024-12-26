@@ -177,8 +177,10 @@
             line-height: 1.8;
             opacity: 0; /* Initially invisible */
             transform: translateX(-20px); /* Slightly offset for effect */
-            animation-timeline: view();
+            
             animation: fadeIn 2s linear; /* Apply the fade-in animation */
+            animation-timeline: view();
+            animation-range: entry 0;
             /* animation-delay: 1s; Optional delay before animation starts */
             
         }
