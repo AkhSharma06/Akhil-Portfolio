@@ -282,6 +282,7 @@
         }
 
 
+
         footer {
             text-align: center;
             padding: 20px;
@@ -487,5 +488,14 @@
         <a href="mailto:akhsharma@ucdavis.edu">akhsharma@ucdavis.edu</a> | Email: 
         <a href="mailto:theakkuking@gmail.com">theakkuking@gmail.com</a></p>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const elements = document.querySelectorAll('.fade-in-text');
+            elements.forEach((el) => {
+                el.style.animation = 'fadeIn 2s ease-in-out forwards';
+            });
+        });
+    </script>
+    
 </body>
 </html>
