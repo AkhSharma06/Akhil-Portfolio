@@ -494,6 +494,7 @@
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            console.log("JavaScript Loaded");
             const fadeInElements = document.querySelectorAll(".fade-in-text");
 
             function handleScroll() {
@@ -507,12 +508,10 @@
                 });
             }
 
-            // Run on scroll
             window.addEventListener("scroll", handleScroll);
-
-            // Initial check on load
-            handleScroll();
+            handleScroll(); // Initial check on load
         });
+
     </script>
 </body>
 </html>
