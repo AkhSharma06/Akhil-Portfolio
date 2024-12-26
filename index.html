@@ -8,13 +8,12 @@
     <style>
         .hidden {
             opacity: 0;
-            transform: translateY(50px); /* Slight downward offset */
-            transition: opacity 1s ease-out, transform 1s ease-out;
         }
 
         .visible {
-            opacity: 1;
-            transform: translateY(0); /* Reset to original position */
+            transform: translateX(-20px); /* Slightly offset for effect */
+            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
+            animation-delay: 1s; /* Optional delay before animation starts */
         }
 
         /* Keyframe for fade-in effect */
@@ -121,9 +120,7 @@
         .intro-text {
             text-align: center; /* Center the text horizontally */
             opacity: 0; /* Initially invisible */
-            transform: translateX(-20px); /* Slightly offset for effect */
-            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
-            animation-delay: 1s; /* Optional delay before animation starts */
+            
         }
 
         .intro-text h1 {
