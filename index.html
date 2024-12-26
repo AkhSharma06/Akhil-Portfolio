@@ -263,6 +263,30 @@
             background-color: #45a049;
         }
 
+        .fade-in-text {
+            opacity: 0; /* Initially invisible */
+            transform: translateY(20px); /* Start slightly below */
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Smooth animation */
+            will-change: opacity, transform; /* Optimized for performance */
+        }
+
+        .fade-in-text.visible {
+            opacity: 1; /* Fully visible */
+            transform: translateY(0); /* Reset position */
+        }
+
+        .fade-in-text {
+            opacity: 0; /* Initially invisible */
+            transform: translateY(20px); /* Start slightly below */
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Smooth animation */
+            will-change: opacity, transform; /* Optimized for performance */
+        }
+
+        .fade-in-text.visible {
+            opacity: 1; /* Fully visible */
+            transform: translateY(0); /* Reset position */
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -317,6 +341,11 @@
             <h2>A Computer Engineer and welcome to my Project Portfolio</h2>
         </div>
     </div>
+
+    <div class="fade-in-text">
+        <p>This text will fade in when scrolled into view.</p>
+    </div>
+    
 
     <!-- About Me Section -->
     <div class="about-me" id="about-me">
@@ -402,19 +431,19 @@
                     </div>
                     <div class="project-text">
                         <h2>NFL Game Outcome Predictor</h2>
-                        <p class="project-summary">A Machine Learning NFL Game Outcome Predictor designed on the 2022-2023 NFL season is able to predict which two teams inputted into the program will win with an accuracry ~61%. 
+                        <p class="project-summary">A Machine Learning (Random Forest) NFL Game Outcome Predictor designed on the 2022-2023 NFL season is able to predict which two teams inputted from the user will win with an accuracry ~61%. 
                             Completed as a group project with Bhavesha Sasikumar, Jackson Cmelak and Denil Neil.
                         </p>
                     </div>
                 </div>
                 <div class="project-buttons">
                     <button onclick="toggleReadMore(this, 3)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/bhaveshasasik/nfl_game_predictor';">View Code</button>
+                    <button class="view-code" onclick="window.location.href='https://nflgamepredictor-5hckdtkzbdzot6ynmrtpky.streamlit.app';">View Code</button>
                 </div>
                 <div class="read-more" id="read-more-3">
                     <p><strong>Technical Stack:</strong></p>
                     <ul>
-                        <li>Frontend: </li>
+                        <li>Frontend: Streamlit</li>
                         <li>Backend: Python</li>
                     </ul>
                     <p><strong>Code Breakdown:</strong></p>
@@ -463,5 +492,27 @@
         <a href="mailto:akhsharma@ucdavis.edu">akhsharma@ucdavis.edu</a> | Email: 
         <a href="mailto:theakkuking@gmail.com">theakkuking@gmail.com</a></p>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fadeInElements = document.querySelectorAll(".fade-in-text");
+
+            function handleScroll() {
+                fadeInElements.forEach((el) => {
+                    const rect = el.getBoundingClientRect();
+                    const inView = rect.top <= window.innerHeight && rect.bottom >= 0;
+
+                    if (inView) {
+                        el.classList.add("visible");
+                    }
+                });
+            }
+
+            // Run on scroll
+            window.addEventListener("scroll", handleScroll);
+
+            // Initial check on load
+            handleScroll();
+        });
+    </script>
 </body>
 </html>
