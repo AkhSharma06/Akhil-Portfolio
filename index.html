@@ -321,23 +321,27 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add("visible");
-                            observer.unobserve(entry.target); // Stop observing once visible
-                        }
-                    });
-                },
-                { threshold: 0.1 } // Trigger when 10% of the element is in view
-            );
+            const hiddenElements = document.querySelectorAll(".hidden");
     
-            // Select all elements to fade in
-            const fadeInElements = document.querySelectorAll(".hidden");
-            fadeInElements.forEach((el) => observer.observe(el));
+            const checkVisibility = () => {
+                hiddenElements.forEach((el) => {
+                    const rect = el.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+    
+                    // Check if the element is within the viewport
+                    if (rect.top <= windowHeight && rect.bottom >= 0) {
+                        el.classList.add("visible");
+                        el.classList.remove("hidden");
+                    }
+                });
+            };
+    
+            // Run on page load and scroll events
+            window.addEventListener("scroll", checkVisibility);
+            checkVisibility(); // Initial check
         });
     </script>
+    
 </head>
 <body>
 
