@@ -7,14 +7,17 @@
     <title>Akhil Sharma's Project Portfolio</title>
     <style>
         .hidden {
-            opacity: 0;
+            opacity: 0; /* Start invisible */
+            transform: translateX(-20px); /* Slightly offset */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
         }
 
         .visible {
-            transform: translateX(-20px); /* Slightly offset for effect */
+            opacity: 1; /* Fully visible */
+            transform: translateX(0); /* Reset position */
             animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
-            animation-delay: 1s; /* Optional delay before animation starts */
         }
+
 
         /* Keyframe for fade-in effect */
         @keyframes fadeIn {
