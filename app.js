@@ -28,11 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("visible");
-                entry.target.classList.remove("hidden"); // Optional: Remove "hidden" if no longer needed
-                observer.unobserve(entry.target); // Stop observing after it's visible
+                entry.target.classList.remove("hidden"); // Optional
+                observer.unobserve(entry.target); // Stop observing once visible
             }
         });
     });
 
     hiddenElements.forEach((el) => observer.observe(el));
 });
+
