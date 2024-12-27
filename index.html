@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <title>Akhil Sharma's Project Portfolio</title>
+    <script src="app.js" defer></script>
     <style>
         /* Keyframe for fade-in effect */
         @keyframes fadeIn {
@@ -29,6 +30,20 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .hidden {
+            opacity: 0;
+            filter: blur(5px);
+            transform: translateX(-20px);
+            transition: opacity 1s 
+            ease-out, transform 1s ease-out;
+        }
+
+        .visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateX(0);
         }
 
         /* Navigation Bar Styling */
@@ -351,6 +366,17 @@
 
     <!-- About Me Section -->
     <div class="about-me hidden" id="about-me">
+        <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
+        <div class="about-me-text">
+            <p>
+                I am a passionate Computer Engineer with a deep desire for solving problems and building innovative projects and solutions to help people.
+                Through my portfolio you will find my many projects I have worked on with applications ranging from Embedded Systems to Artificial Intelligence and Computer
+                Networks. I thrive on challenges that push me to learn and grow.
+            </p>
+        </div>
+    </div>
+
+    <div class="hidden" id="about-me">
         <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
         <div class="about-me-text">
             <p>
