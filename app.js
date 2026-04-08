@@ -1,39 +1,32 @@
-// document.addEventListener("DOMContentLoaded", () => {
-// const hiddenElements = document.querySelectorAll(".hidden");
+document.addEventListener('DOMContentLoaded', () => {
+    const hiddenElements = document.querySelectorAll('.hidden');
 
-//     const observer = new IntersectionObserver(
-//         (entries) => {
-//             entries.forEach((entry) => {
-//                 if (entry.isIntersecting) {
-//                     entry.target.classList.add("visible");
-//                     // entry.target.classList.remove("hidden");
-//                     // observer.unobserve(entry.target); // Stop observing once visible
-//                 } else {
-//                     entry.target.classList.remove("visible");
-//                 }
-//             });
-//         },
-//     );
-
-//     // hiddenElements.forEach((el) => observer.observe(el));
-// });
-
-// // const hiddenElements = document.querySelectorAll('.hidden');
-// hiddenElements.forEach((el) => observer.observer(el));
-
-document.addEventListener("DOMContentLoaded", () => {
-    const hiddenElements = document.querySelectorAll(".hidden");
-
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                entry.target.classList.remove("hidden"); // Optional
-                observer.unobserve(entry.target); // Stop observing once visible
+                entry.target.classList.add('visible');
+                entry.target.classList.remove('hidden');
+                obs.unobserve(entry.target);
             }
         });
+    }, {
+        threshold: 0.1
     });
 
     hiddenElements.forEach((el) => observer.observe(el));
-});
 
+    document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-toggle-readmore]');
+        if (!button) return;
+
+        const projectId = button.dataset.projectId;
+        const readMoreSection = document.getElementById(`read-more-${projectId}`);
+
+        if (!readMoreSection) return;
+
+        const isExpanded = readMoreSection.style.display === 'block';
+        readMoreSection.style.display = isExpanded ? 'none' : 'block';
+        button.textContent = isExpanded ? 'Read More' : 'Read Less';
+        button.setAttribute('aria-expanded', !isExpanded);
+    });
+});

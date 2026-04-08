@@ -3,537 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Akhil Sharma's Project Portfolio - Computer Engineer showcasing projects in Embedded Systems, AI, and more.">
+    <meta name="author" content="Akhil Sharma">
     <title>Akhil Sharma's Project Portfolio</title>
-    <script defer src="app.js"></script>
-    <style>
-        /* Keyframe for fade-in effect */
-        @keyframes fadeIn {
-            from {
-                opacity: 0; /* Initially invisible */
-                transform: translateX(-20px);
-                /* scale: 0.5; */
-            }
-            to {
-                opacity: 1; /* Fully visible */
-                transform: translateX(0);
-                /* scale: 1; */
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hidden {
-            opacity: 0;
-            filter: blur(5px);
-            transform: translateX(-20px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
-
-        .visible {
-            opacity: 1;
-            filter: blur(0);
-            transform: translateX(0);
-        }
-
-        /* Navigation Bar Styling */
-        .navbar {
-            position: fixed; /* Sticks to the top of the page */
-            top: 0;
-            width: 100%; /* Full width */
-            background-color: #111;
-            color: white;
-            display: flex;
-            justify-content: center;
-            gap: 30px; /* Space between links */
-            padding: 10px 0; /* Vertical padding */
-            z-index: 1000; /* Ensure it stays on top */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow */
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none; /* Remove underline */
-            font-size: 1.2rem; /* Increase font size */
-            transition: color 1s ease; /* Smooth hover effect */
-        }
-
-        .navbar a:hover {
-            color: #8DD5E7; /* Light blue on hover */
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #111/*10078D*/;
-            color: #333;
-        }
-
-        html {
-            scroll-behavior: smooth; /* Enables smooth scrolling */
-        }
-
-        .intro {
-            position: relative;
-            background: linear-gradient(to bottom, #111 85%, rgba(0, 0, 0, 0));
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Montserrat', sans-serif;
-            gap: 20px;
-            background-color: #111; /* Black background */
-            color: #fff; /* White text */
-            height: 100vh; /* Full viewport height */
-            display: flex; /* Flexbox for alignment */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            position: relative; /* Positioned at the top */
-            width: 100%; /* Full width */
-            z-index: 1; /* Ensure it’s on top of other content */
-            gap: 20px; /* Space between the image and text */
-            padding-top: 60px; /* Offset for the fixed navbar height */
-        }
-
-        .intro-image {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            object-fit: cover;
-        }
-
-        .wrapper {
-            margin-top: 0;
-            opacity: 0; /* Start hidden */
-            transform: translateY(50px); /* Start slightly below */
-            animation: slideUp 1s ease-out forwards;
-            animation-delay: 0.5s;
-            padding-top: 60px; /* Offset for the fixed navbar height */
-        }
-
-        .intro-text {
-            text-align: center; /* Center the text horizontally */
-            opacity: 0; /* Initially invisible */
-            /* transform: translateX(-20px); Slightly offset for effect */
-            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
-            /* animation-delay: 1s; Optional delay before animation starts */
-        }
-
-        .intro-text h1 {
-            font-size: 3rem; /* Main heading size */
-            margin: 0; /* Remove default margin */
-        }
-
-        .intro-text h2 {
-            font-size: 1.5rem; /* Subheading size */
-            margin: 10px 0 0; /* Add a little space above */
-            font-weight: 300; /* Optional: lighter weight for subheading */
-        }
-
-        .container {
-            padding: 20px 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px; 
-            margin: 0 auto; 
-        }
-
-        /* About Me Section */
-        .about-me {
-            display: flex;
-            align-items: center; /* Vertically centers the content */
-            justify-content: center; /* Horizontally centers the content */
-            flex-direction: row; /* Ensures the image and text are side by side */
-            padding: 50px 20px;
-            background-color: #111;
-            color: white;
-            gap: 30px; /* Space between the image and text */
-            text-align: center; /* Ensures text is centered if it wraps */
-            height: 100vh; /* Full viewport height for centering */
-            font-family: 'Montserrat', sans-serif;
-        }
-
-
-        .about-me img {
-            width: 350px; /* Set the desired width */
-            height: 350px; /* Set the desired height */
-            object-fit: cover; /* Ensures the image scales properly */
-            display: block; /* Prevents inline spacing issues */
-            margin: 0; /* Removes extra margins */
-            /* border-radius: 15px; Slight rounding for edges */
-            /* border: 5px solid #fff; White border around the image */
-            /* box-sizing: border-box; Includes the border in the dimensions */
-            animation: fadeIn 2s ;
-            
-        }
-
-
-        .about-me-text {
-            flex-grow: 1;
-            max-width: 1000px;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            opacity: 0; /* Initially invisible */
-            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
-            /* animation-range: ; */
-            /* animation-delay: 1s; Optional delay before animation starts */
-            
-        }
-
-        .project {
-            background-color: #111/*B5D6ED*/;
-            padding: 20px;
-            border: 2px solid #B3A369; /* Gold border */
-            border-radius: 8px;
-            box-shadow: 10px 10px 10px -8px rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%; /* Full width of the container */
-            margin: 0 auto 20px auto; /* Center align */
-            color: #fff;
-            animation: fadeIn 2s ease-in-out forwards;
-            
-        }
-
-
-        .project-content {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: flex-start;
-            width: 100%;
-            max-width: 100%; 
-            margin-bottom: 20px; /* Add spacing between content and read more section */
-        }
-
-        .project-image {
-            flex: 0 0 25%;
-            margin-right: 20px;
-        }
-
-        .project-image img {
-            width: 100%;
-            max-width: 300px;
-            max-height: 300px;
-            border-radius: 8px;
-            object-fit: cover; /* Ensure the image fills the space while maintaining aspect ratio */
-        }
-
-        .project-text {
-            flex-grow: 1;
-            color: #fff;
-            opacity: 0; /* Initially invisible */
-            /* transform: translateX(-20px); Slightly offset for effect */
-            animation: fadeIn 2s ease-in-out forwards; /* Apply the fade-in animation */
-            animation-delay: 1s; /* Optional delay before animation starts */
-        }
-
-        .project h2 {
-            font-size: 30px;
-            margin-top: 0;
-            color: #fff;
-        }
-
-        /* Position read more section below the image and content */
-        .read-more {
-            display: none;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .project-summary {
-            margin: 10px 0;
-            font-size: 22px;
-            color: #fff;
-        }
-
-        .project-buttons {
-            display: flex;
-            justify-content: space-between; /* Evenly distribute the buttons */
-            width: 300px; /* Limit the total width to 300px */
-            margin-top: 10px;
-        }
-
-        .project button {
-            background-color: #002855;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transform and color change */
-        }
-
-        .project button:hover {
-            transform: scale(1.1); /* Slightly enlarge button */
-            background-color: #00509E; /* Change color on hover */
-        }
-
-
-        .project button:last-child {
-            margin-right: 0;
-        }
-
-        .project button.view-code {
-            background-color: #B3A369;
-        }
-
-        .project button.view-code:hover {
-            background-color: #B3A369;
-        }
-
-        /* Apply the fade-in animation */
-        .fade-in-text {
-            opacity: 0;
-            transform: translateX(-20px);
-            animation: fadeIn 2s ease-in-out forwards;
-            animation-delay: 2s; /* Wait 2 seconds before starting the animation */
-            color: white;
-        }
-
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #111;
-            color: white;
-            margin-top: 40px;
-            width: 100%;
-            max-width: 1200px; /* Match the width of .wrapper */
-            margin: 0 auto 20px auto;
-            padding-top: 60px; /* Offset for the fixed navbar height */
-        }
-
-        footer a {
-            color: #8DD5E7;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
-    <script>
-        function toggleReadMore(button, projectId) {
-            var readMoreSection = document.getElementById('read-more-' + projectId);
-            
-            if (readMoreSection.style.display === 'block') {
-                readMoreSection.style.display = 'none';
-                button.innerHTML = 'Read More'; // Change button to "Read More"
-            } else {
-                readMoreSection.style.display = 'block';
-                button.innerHTML = 'Read Less'; // Change button to "Read Less"
-            }
-        }
-    </script>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <a href="#home">Home</a>
-        <a href="#about-me">About Me</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact-me">Contact Me</a>
-    </nav>
+    <header class="navbar" role="banner">
+        <nav role="navigation" aria-label="Main navigation">
+            <a href="#home">Home</a>
+            <a href="#about-me">About Me</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact-me">Contact Me</a>
+        </nav>
+    </header>
 
-    <!-- Intro Section -->
-    <div class="intro" id="home">
-        <img src="Images/grad_photo.jpg" alt="Your Photo" class="intro-image">
-        <div class="intro-text">
-            <h1>Hi, I am Akhil Sharma</h1>
-            <h2>A Computer Engineer and welcome to my Project Portfolio</h2>
-        </div>
-    </div>
-
-    <!-- About Me Section -->
-    <div class="about-me hidden" id="about-me">
-        <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me img">
-        <div class="about-me-text">
-            <!-- <p>
-                I am a passionate Computer Engineer with a deep desire for solving problems and building innovative projects and solutions to help people.
-                Through my portfolio you will find my many projects I have worked on with applications ranging from Embedded Systems to Artificial Intelligence and Computer
-                Networks. I thrive on challenges that push me to learn and grow.
-            </p> -->
-            <p>
-                I am a passionate <strong>Computer Engineer</strong> dedicated to solving problems and creating innovative solutions that make a meaningful impact. 
-                Throughout my career, I have worked on a diverse range of projects that have developed my skills in Embedded Systems and Artificial Intelligence.
-            </p>
-            <p>
-                As my Senior Design Project my group and I developed <strong>"Dora the Explora"</strong>, an autonomous RC car project which utilizes PID control and real-time mapping to navigate. 
-                This project allowed me to apply my Computer Engineering knowledge gained throughout my education while further deepening my understanding of real-world problem-solving and system design.
-            </p>
-            <p>
-                In my professional career, I have gained experience working as a <strong>Website and Digital Technology Analyst</strong> for Marya Leadership Academy. 
-                I led efforts to enhance their digital presence by developing user-friendly websites and implementing robust e-commerce solutions.
-            </p>
-            <p>
-                Additionally, during my internship at <strong>IBM</strong>, I contributed to the development of natural language processing systems, analyzing large datasets to derive actionable insights 
-                and supporting server-side functionalities. These roles have honed my technical, problem-solving, and team collaboration skills.
-            </p>
-        </div>
-    </div>
-
-    <!-- <div class="about-me hidden">
-        <img src="Images/about_me_img.jpeg" alt="About Me Photo" class="about-me-img">
-        <div class="about-me-text">
-            <p>
-                I am a passionate Computer Engineer with a deep desire for solving problems and building innovative projects and solutions to help people.
-            </p>
-        </div>
-    </div> -->
-    
-
-    <!-- Projects Section -->
-    <div class="wrapper" id="projects">
-        <div class="container">
-            <!-- Project 1 -->
-            <div class="project">
-                <div class="project-content">
-                    <div class="project-image">
-                        <img src="Images/dora_final_pic.jpg" alt="Dora Final Pic">
-                    </div>
-                    <div class="project-text">
-                        <h2>Dora the Explora: Autonomous Vehicle Project</h2>
-                        <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
-                    </div>
-                </div>
-                <div class="project-buttons">
-                    <button onclick="toggleReadMore(this, 1)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project';">View Code</button>
-                </div>
-                <div class="read-more" id="read-more-1">
-                    <p><strong>Technical Stack:</strong></p>
-                    <ul>
-                        <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
-                        <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
-                        <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
-                    </ul>
-                    <p><strong>Code Breakdown:</strong></p>
-                    <ul>
-                        <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
-                        <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
-                        <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
-                    </ul>
-                </div>
+    <main id="main-content">
+        <section class="intro" id="home" aria-labelledby="intro-heading">
+            <img src="Images/grad_photo.jpg" alt="Akhil Sharma wearing graduation attire" class="intro-image">
+            <div class="intro-text">
+                <h1 id="intro-heading">Hi, I am Akhil Sharma</h1>
+                <h2>A Computer Engineer and welcome to my Project Portfolio</h2>
             </div>
+        </section>
 
-            <!-- Project 2 -->
-            <div class="project">
-                <div class="project-content">
-                    <div class="project-image">
-                        <img src="Images/swivelfind.jpg"SwivelFind Project">
-                    </div>
-                    <div class="project-text">
-                        <h2>SwivelFind: Embedded Systems Final Project</h2>
-                        <p class="project-summary"> A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote. Completed in a group of 2 with Corbin Warmbier. Received Honorary Mention for Exceptional Project </p>
-                    </div>
-                </div>
-                <div class="project-buttons">
-                    <button onclick="toggleReadMore(this, 2)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/cpwarmbi/SwivelFind';">View Code</button>
-                </div>
-                <div class="read-more" id="read-more-2">
-                    <p><strong>Technical Stack:</strong></p>
-                    <ul>
-                        <li>Hardware: Ultrasonic Sensor (UART), OLED Display (SPI), Stepper Motor (PWM)</li>
-                        <li>Software: Embedded C, AWS IoT (for cloud communication)</li>
-                    </ul>
-                    <p><strong>Code Breakdown:</strong></p>
-                    <ul>
-                        <li>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</li>
-                        <li>Motor Control: A stepper motor is driven using Pulse Width Modulation (PWM) for precise rotation control.</li>
-                        <li>Remote Communication: The IR remote control is programmed to start and stop scanning. AWS IoT is used for remote data logging.</li>
-                    </ul>
-                </div>
+        <section class="about-me hidden" id="about-me" aria-labelledby="about-heading">
+            <img src="Images/about_me_img.jpeg" alt="Akhil Sharma working on a project" class="about-me-image">
+            <div class="about-me-text">
+                <h2 id="about-heading" class="sr-only">About Me</h2>
+                <p>
+                    I am a passionate <strong>Computer Engineer</strong> dedicated to solving problems and creating innovative solutions that make a meaningful impact. 
+                    Throughout my career, I have worked on a diverse range of projects that have developed my skills in Embedded Systems and Artificial Intelligence.
+                </p>
+                <p>
+                    As my Senior Design Project my group and I developed <strong>"Dora the Explora"</strong>, an autonomous RC car project which utilizes PID control and real-time mapping to navigate. 
+                    This project allowed me to apply my Computer Engineering knowledge gained throughout my education while further deepening my understanding of real-world problem-solving and system design.
+                </p>
+                <p>
+                    In my professional career, I have gained experience working as a <strong>Website and Digital Technology Analyst</strong> for Marya Leadership Academy. 
+                    I led efforts to enhance their digital presence by developing user-friendly websites and implementing robust e-commerce solutions.
+                </p>
+                <p>
+                    Additionally, during my internship at <strong>IBM</strong>, I contributed to the development of natural language processing systems, analyzing large datasets to derive actionable insights 
+                    and supporting server-side functionalities. These roles have honed my technical, problem-solving, and team collaboration skills.
+                </p>
             </div>
+        </section>
 
-            <!-- Project 3 -->
-            <div class="project">
-                <div class="project-content">
-                    <div class="project-image">
-                        <img src="Images/outcomepredictor.png" alt="CEC's Café App Project">
+        <section class="wrapper" id="projects" aria-labelledby="projects-heading">
+            <div class="container">
+                <h2 id="projects-heading" class="sr-only">My Projects</h2>
+
+                <article class="project" aria-labelledby="project-1-title">
+                    <div class="project-content">
+                        <div class="project-image">
+                            <img src="Images/dora_final_pic.jpg" alt="Dora the Explora autonomous vehicle prototype with LIDAR sensor mounted on top">
+                        </div>
+                        <div class="project-text">
+                            <h3 id="project-1-title">Dora the Explora: Autonomous Vehicle Project</h3>
+                            <p class="project-summary">This project involved the development of an autonomous RC car capable of navigating hallways without human intervention. The car uses LIDAR-based sensing and implements real-time mapping for navigation. Completed as our Senior Design Project in a group of 4 with Corbin Warmbier, Brian Barcenas and Alize De Leon, earning a Final Demonstration Grade of 96%.</p>
+                        </div>
                     </div>
-                    <div class="project-text">
-                        <h2>NFL Game Outcome Predictor</h2>
-                        <p class="project-summary">A Machine Learning (Random Forest) NFL Game Outcome Predictor designed on the 2022-2023 NFL season is able to predict which two teams inputted from the user will win with an accuracry ~61%. 
-                            Completed as a group project with Bhavesha Sasikumar, Jackson Cmelak and Denil Neil.
-                        </p>
+                    <div class="project-buttons">
+                        <button class="btn" data-toggle-readmore data-project-id="1" aria-expanded="false">Read More</button>
+                        <a href="https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Dora%20the%20Explora_Autonomous%20Vehicle%20Project" class="btn btn--gold" aria-label="View code for Dora the Explora project">View Code</a>
                     </div>
-                </div>
-                <div class="project-buttons">
-                    <button onclick="toggleReadMore(this, 3)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://nflgamepredictor-5hckdtkzbdzot6ynmrtpky.streamlit.app';">View Code</button>
-                </div>
-                <div class="read-more" id="read-more-3">
-                    <p><strong>Technical Stack:</strong></p>
-                    <ul>
-                        <li>Frontend: Streamlit</li>
-                        <li>Backend: Python</li>
-                    </ul>
-                    <p><strong>Code Breakdown:</strong></p>
-                    <ul>
-                        <li>Data Preprocessing:Player and team statistics were cleaned and normalized using Pandas to ensure consistent data formatting.</li>
-                        <li>Model Selection: A Random Forest model was trained on features such as offense/defense impact scores, team rankings, and historical performance, yielding a prediction accuracy of 61%.</li>
-                        <li>User Input: Users can input two NFL team names, and the model computes the predicted winner along with a confidence probability.</li>
-                        <li>Data Parsing: Data was dynamically parsed based on a specified range of weeks, ensuring real-time adaptability during the season.</li>
-                    </ul>
-                </div>
+                    <div class="read-more" id="read-more-1">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Hardware: Raspberry Pi, Raspberry Pi Pico, RPLIDAR A1M8</li>
+                            <li>Software: Python (control logic), Open3D (for 3D visualization)</li>
+                            <li>Control System: P (Proportional), I (Integral), and OBs (Obstacle Avoidance) terms</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <ul>
+                            <li>Sensors: The RPLIDAR A1M8 sensor collects distance data in real time, processed in the Raspberry Pi.</li>
+                            <li>Mapping: A 3D point cloud is generated using the Open3D library. This is continuously updated as the vehicle moves.</li>
+                            <li>Navigation: The control system consists of PID-like parameters (P, I) for maintaining direction and an obstacle avoidance (OBs) system that dynamically adjusts speed and path based on the LIDAR data.</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article class="project" aria-labelledby="project-2-title">
+                    <div class="project-content">
+                        <div class="project-image">
+                            <img src="Images/swivelfind.jpg" alt="SwivelFind 360-degree rangefinder device with ultrasonic sensor and OLED display">
+                        </div>
+                        <div class="project-text">
+                            <h3 id="project-2-title">SwivelFind: Embedded Systems Final Project</h3>
+                            <p class="project-summary">A 360-degree swiveling rangefinder capable of detecting objects around it using an Ultrasonic Sensor. It integrates several devices, including an OLED display, a Stepper Motor, and an IR remote. Completed in a group of 2 with Corbin Warmbier. Received Honorary Mention for Exceptional Project</p>
+                        </div>
+                    </div>
+                    <div class="project-buttons">
+                        <button class="btn" data-toggle-readmore data-project-id="2" aria-expanded="false">Read More</button>
+                        <a href="https://github.com/cpwarmbi/SwivelFind" class="btn btn--gold" aria-label="View code for SwivelFind project">View Code</a>
+                    </div>
+                    <div class="read-more" id="read-more-2">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Hardware: Ultrasonic Sensor (UART), OLED Display (SPI), Stepper Motor (PWM)</li>
+                            <li>Software: Embedded C, AWS IoT (for cloud communication)</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <ul>
+                            <li>Sensor Communication: UART is used for data exchange between the Ultrasonic Sensor and the microcontroller, while SPI is used to display distance readings on the OLED display.</li>
+                            <li>Motor Control: A stepper motor is driven using Pulse Width Modulation (PWM) for precise rotation control.</li>
+                            <li>Remote Communication: The IR remote control is programmed to start and stop scanning. AWS IoT is used for remote data logging.</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article class="project" aria-labelledby="project-3-title">
+                    <div class="project-content">
+                        <div class="project-image">
+                            <img src="Images/outcomepredictor.png" alt="NFL Game Outcome Predictor application interface showing team statistics">
+                        </div>
+                        <div class="project-text">
+                            <h3 id="project-3-title">NFL Game Outcome Predictor</h3>
+                            <p class="project-summary">A Machine Learning (Random Forest) NFL Game Outcome Predictor designed on the 2022-2023 NFL season is able to predict which two teams inputted from the user will win with an accuracy of approximately 61%. Completed as a group project with Bhavesha Sasikumar, Jackson Cmelak and Denil Neil.</p>
+                        </div>
+                    </div>
+                    <div class="project-buttons">
+                        <button class="btn" data-toggle-readmore data-project-id="3" aria-expanded="false">Read More</button>
+                        <a href="https://nflgamepredictor-5hckdtkzbdzot6ynmrtpky.streamlit.app" class="btn btn--gold" aria-label="View code for NFL Game Outcome Predictor project">View Code</a>
+                    </div>
+                    <div class="read-more" id="read-more-3">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Frontend: Streamlit</li>
+                            <li>Backend: Python</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <ul>
+                            <li>Data Preprocessing: Player and team statistics were cleaned and normalized using Pandas to ensure consistent data formatting.</li>
+                            <li>Model Selection: A Random Forest model was trained on features such as offense/defense impact scores, team rankings, and historical performance, yielding a prediction accuracy of 61%.</li>
+                            <li>User Input: Users can input two NFL team names, and the model computes the predicted winner along with a confidence probability.</li>
+                            <li>Data Parsing: Data was dynamically parsed based on a specified range of weeks, ensuring real-time adaptability during the season.</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article class="project" aria-labelledby="project-4-title">
+                    <div class="project-content">
+                        <div class="project-image">
+                            <img src="Images/zipunzip.png" alt="Zip/Unzip data compression tool showing Huffman tree visualization">
+                        </div>
+                        <div class="project-text">
+                            <h3 id="project-4-title">Zip/Unzip: Data Structures Project</h3>
+                            <p class="project-summary">This project implements a data compression and decompression system in C/C++, leveraging Huffman Tree data structures to optimize storage space and improve data access efficiency. The project includes two main components: zap.c for compression (zipping) and unzap.c for decompression (unzipping), providing a practical demonstration of Huffman encoding.</p>
+                        </div>
+                    </div>
+                    <div class="project-buttons">
+                        <button class="btn" data-toggle-readmore data-project-id="4" aria-expanded="false">Read More</button>
+                        <a href="https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Zip%20Unzip" class="btn btn--gold" aria-label="View code for Zip/Unzip project">View Code</a>
+                    </div>
+                    <div class="read-more" id="read-more-4">
+                        <p><strong>Technical Stack:</strong></p>
+                        <ul>
+                            <li>Language: C/C++</li>
+                            <li>Data Structures: Huffman Tree (custom implementation)</li>
+                        </ul>
+                        <p><strong>Code Breakdown:</strong></p>
+                        <ul>
+                            <li>Huffman Tree Map: A custom Huffman Tree is implemented to assign variable-length codes to input characters based on their frequency, maximizing compression efficiency.</li>
+                            <li>Compression Algorithm: The algorithm constructs the Huffman Tree using a priority queue, encoding data by mapping each unique value to a tree node. The more frequent a value, the shorter its assigned code, resulting in reduced data size.</li>
+                        </ul>
+                    </div>
+                </article>
             </div>
+        </section>
+    </main>
 
-            <!-- Project 4 -->
-            <div class="project">
-                <div class="project-content">
-                    <div class="project-image">
-                        <img src="Images/zipunzip.png" alt="Zip/Unzip Project">
-                    </div>
-                    <div class="project-text">
-                        <h2>Zip/Unzip: Data Structures Project</h2>
-                        <p class="project-summary">This project implements a data compression and decompression system in C/C++, leveraging Huffman Tree data structures to optimize storage space and improve data access efficiency. The project includes two main components: zap.c for compression (zipping) and unzap.c for decompression (unzipping), providing a practical demonstration of Huffman encoding.</p>
-                    </div>
-                </div>
-                <div class="project-buttons">
-                    <button onclick="toggleReadMore(this, 4)">Read More</button>
-                    <button class="view-code" onclick="window.location.href='https://github.com/AkhSharma06/Akhil-Portfolio/tree/main/Zip%20Unzip';">View Code</button>
-                </div>
-                <div class="read-more" id="read-more-4">
-                    <p><strong>Technical Stack:</strong></p>
-                    <ul>
-                        <li>Language: C/C++</li>
-                        <li>Data Structures: Huffman Tree (custom implementation)</li>
-                    </ul>
-                    <p><strong>Code Breakdown:</strong></p>
-                    <ul>
-                        <li>Huffman Tree Map: A custom Huffman Tree is implemented to assign variable-length codes to input characters based on their frequency, maximizing compression efficiency.</li>
-                        <li>Compression Algorithm: The algorithm constructs the Huffman Tree using a priority queue, encoding data by mapping each unique value to a tree node. The more frequent a value, the shorter its assigned code, resulting in reduced data size.</li>
-                    </ul>
-                </div>
-        </div>
-    </div>
-
-    <!-- Contact Me Section -->
-    <footer id="contact-me">
+    <footer class="site-footer" id="contact-me" role="contentinfo">
         <p>Connect with me on <a href="https://www.linkedin.com/in/akhsharma/">LinkedIn</a> | School Email: 
         <a href="mailto:akhsharma@ucdavis.edu">akhsharma@ucdavis.edu</a> | Email: 
         <a href="mailto:theakkuking@gmail.com">theakkuking@gmail.com</a></p>
     </footer>
+
+    <script src="app.js" defer></script>
 </body>
 </html>
