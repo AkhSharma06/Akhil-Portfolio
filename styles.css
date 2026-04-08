@@ -98,30 +98,32 @@ body {
     background-color: var(--color-bg);
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 15px;
     padding: 10px 0;
     z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.navbar a {
+.navbar nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.navbar nav a {
     color: var(--color-white);
     text-decoration: none;
     font-size: 1.2rem;
     transition: color 1s ease;
 }
 
-.navbar a:hover,
-.navbar a:focus {
-    color: var(--color-accent);
-    outline: 2px solid var(--color-accent);
-    outline-offset: 4px;
+.navbar nav a:not(:last-child)::after {
+    content: '|';
+    margin-left: 15px;
+    color: var(--color-gold);
 }
 
-.navbar a:focus {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 4px;
-}
+
 
 .intro {
     background-color: var(--color-bg);
@@ -282,6 +284,33 @@ body {
     justify-content: flex-start;
     gap: 10px;
     flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.read-more-toggle {
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    font-family: var(--font-main);
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-style: normal;
+}
+
+.read-more-toggle:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+}
+
+.view-code-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.project {
+    position: relative;
 }
 
 .btn {

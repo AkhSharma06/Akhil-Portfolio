@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hiddenElements.forEach((el) => observer.observe(el));
 
     document.addEventListener('click', (e) => {
-        const button = e.target.closest('[data-toggle-readmore]');
+        const button = e.target.closest('.read-more-toggle');
         if (!button) return;
 
         const projectId = button.dataset.projectId;
